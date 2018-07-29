@@ -3,20 +3,36 @@
 void StairsLedDriver::Begin(int stripsCount)
 {
 	pwm.begin();
-	pwm.setPWMFreq(500);
+	pwm.setPWMFreq(1000);
 
 	this->stripsCount = stripsCount;
+	Serial.println("1");
 	this->ledStrips = new LedStrip*[stripsCount];
+	Serial.println("2");
 	for (int i = 0; i < stripsCount; i++)
 		this->ledStrips[i] = new LedStrip(pwm, i, MILLIS_COUNT_FOR_FULL_BRIGHTNESS);
 
-	this->ledStrips[0]->LightUp(100);
+	Serial.println("3");
+	this->temp = 0;
+	this->goingUp = false;
 }
 
 void StairsLedDriver::Update()
 {
 	for (int i = 0; i < this->stripsCount; ++i)
 	{
-		this->ledStrips[i]->Update();
+		ledStrips[i]->Update();
+	}
+
+	if (millis() - temp > 15000)
+	{
+		temp = millis();
+		goingUp = !goingUp;
+
+		if (goingUp)
+			ledStrips[0]->LightUp(100);
+		else
+			ledStrips[0]->LightUp(0);
+
 	}
 }
