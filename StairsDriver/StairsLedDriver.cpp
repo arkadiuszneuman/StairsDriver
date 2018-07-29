@@ -24,7 +24,7 @@ void StairsLedDriver::Update()
 		ledStrips[i]->Update();
 	}
 
-	if (millis() - temp > 15000)
+	if (millis() - temp > 4000)
 	{
 		temp = millis();
 		goingUp = !goingUp;

@@ -13,7 +13,7 @@
 	#include "WProgram.h"
 #endif
 
-#define MILLIS_COUNT_FOR_FULL_BRIGHTNESS 10000
+#define MILLIS_COUNT_FOR_FULL_BRIGHTNESS 1000
 
 class StairsLedDriver
 {
