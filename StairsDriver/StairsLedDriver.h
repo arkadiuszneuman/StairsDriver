@@ -22,7 +22,7 @@ private:
 	LedStrip** ledStrips;
 	int stripsCount;
 	unsigned long int temp;
-	bool goingUp;
+	int state;
 public:
 	void Begin(int stripsCount);
 	void Update();

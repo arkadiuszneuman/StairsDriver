@@ -37,19 +37,19 @@ void LedStrip::Update()
 
 		double timeLeftPercent = difference * 1.0 * 100 / this->milisCountForFullBrightness;
 
-		if (timeLeftPercent >= 100)
-		{
-			this->currentBrightness = this->brightnessToSet;
-			SetPWM(this->currentBrightness);
-			this->isFading = false;
-			this->millisStart = 0;
-			return;
-		}
-
 		if (this->brightnessGoingUp)
 			this->currentBrightness = timeLeftPercent * MAX_LED_BRIGHTNESS / 100;
 		else
 			this->currentBrightness = MAX_LED_BRIGHTNESS - (timeLeftPercent * MAX_LED_BRIGHTNESS / 100);
+
+		if (timeLeftPercent >= 100 ||
+			(brightnessGoingUp && currentBrightness >= brightnessToSet) ||
+			(!brightnessGoingUp && currentBrightness <= brightnessToSet))
+		{
+			this->currentBrightness = this->brightnessToSet;
+			this->isFading = false;
+			this->millisStart = 0;
+		}
 
 		SetPWM(this->currentBrightness);
 	}

@@ -14,7 +14,7 @@ void StairsLedDriver::Begin(int stripsCount)
 
 	Serial.println("3");
 	this->temp = 0;
-	this->goingUp = false;
+	this->state = 1;
 }
 
 void StairsLedDriver::Update()
@@ -27,20 +27,31 @@ void StairsLedDriver::Update()
 	if (millis() - temp > 4000)
 	{
 		temp = millis();
-		goingUp = !goingUp;
 
-		if (goingUp)
+		if (state == 1)
 		{
-			ledStrips[0]->Fade(100);
-			ledStrips[1]->Fade(100, 1000);
-			ledStrips[2]->Fade(100, 2000);
+			for (int i = 0; i < stripsCount; ++i)
+			{
+				ledStrips[i]->Fade(50, i * 1000);
+			}
 		}
-		else
+		else if (state == 2)
 		{
-			ledStrips[0]->Fade(0);
-			ledStrips[1]->Fade(0, 1000);
-			ledStrips[2]->Fade(0, 2000);
+			for (int i = 0; i < stripsCount; ++i)
+			{
+				ledStrips[i]->Fade(100, i * 1000);
+			}
+		}
+		else if (state == 3)
+		{
+			for (int i = 0; i < stripsCount; ++i)
+			{
+				ledStrips[i]->Fade(0, i * 1000);
+			}
 		}
 
+		++state;
+		if (state > 3)
+			state = 1;
 	}
 }
