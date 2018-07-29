@@ -14,14 +14,15 @@ void LedStrip::Fade(int brightnessPercent, int delay)
 {
 	this->brightnessToSet = brightnessPercent * 1.0 * MAX_LED_BRIGHTNESS / 100;
 	this->brightnessGoingUp = this->brightnessToSet > this->currentBrightness;
+	this->millisStart = millis() + delay;
+	this->isFading = true;
+
 	Serial.print("Setting percent ");
 	Serial.println(brightnessPercent);
 	Serial.print("Setting brightness ");
 	Serial.println(brightnessToSet);
 	Serial.print("GoingUp ");
 	Serial.println(brightnessGoingUp);
-	this->millisStart = millis() + delay;
-	this->isFading = true;
 }
 
 void LedStrip::Update()
@@ -29,30 +30,29 @@ void LedStrip::Update()
 	if (!this->isFading)
 		return;
 
-		long currentMillis = millis();
-		if (currentMillis >= millisStart)
+	long currentMillis = millis();
+	if (currentMillis >= millisStart)
+	{
+		long difference = currentMillis - millisStart;
+
+		double timeLeftPercent = difference * 1.0 * 100 / this->milisCountForFullBrightness;
+
+		if (timeLeftPercent >= 100)
 		{
-
-			long difference = currentMillis - millisStart;
-
-			double timeLeftPercent = difference * 1.0 * 100 / this->milisCountForFullBrightness;
-
-			if (timeLeftPercent >= 100)
-			{
-				this->currentBrightness = this->brightnessToSet;
-				SetPWM(this->currentBrightness);
-				this->isFading = false;
-				this->millisStart = 0;
-				return;
-			}
-
-			if (this->brightnessGoingUp)
-				this->currentBrightness = timeLeftPercent * MAX_LED_BRIGHTNESS / 100;
-			else
-				this->currentBrightness = MAX_LED_BRIGHTNESS - (timeLeftPercent * MAX_LED_BRIGHTNESS / 100);
-
+			this->currentBrightness = this->brightnessToSet;
 			SetPWM(this->currentBrightness);
+			this->isFading = false;
+			this->millisStart = 0;
+			return;
 		}
+
+		if (this->brightnessGoingUp)
+			this->currentBrightness = timeLeftPercent * MAX_LED_BRIGHTNESS / 100;
+		else
+			this->currentBrightness = MAX_LED_BRIGHTNESS - (timeLeftPercent * MAX_LED_BRIGHTNESS / 100);
+
+		SetPWM(this->currentBrightness);
+	}
 }
 
 void LedStrip::SetPWM(int pwmValue)
@@ -65,7 +65,7 @@ void LedStrip::SetPWM(int pwmValue)
 		pwmValue = MAX_LED_BRIGHTNESS - pwmValue;
 
 	Serial.print("[");
-	Serial.println(this->channel);
+	Serial.print(this->channel);
 	Serial.print("] current brightness: ");
 	Serial.println(pwmValue);
 
