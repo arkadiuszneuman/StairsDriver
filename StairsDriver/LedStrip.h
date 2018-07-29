@@ -23,11 +23,12 @@ private:
 	int currentBrightness = 0;
 	int brightnessToSet = 0;
 	bool brightnessGoingUp = true;
-	long millisStart;
+	bool isFading = false;
+	long millisStart = 0;
 	void SetPWM(int pwmValue);
 public:
 	LedStrip(Adafruit_PWMServoDriver &pwm, int channel, int milisCountForFullBrightness);
-	void LightUp(int brightnessPercent);
+	void LightUp(int brightnessPercent, int delay = 0);
 	void Update();
 };
 
