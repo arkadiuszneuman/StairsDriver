@@ -82,11 +82,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InfraredDistanceRangingSensor.h" />
     <ClInclude Include="LedStrip.h" />
     <ClInclude Include="StairsLedDriver.h" />
     <ClInclude Include="__vm\.StairsDriver.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="InfraredDistanceRangingSensor.cpp" />
     <ClCompile Include="LedStrip.cpp" />
     <ClCompile Include="StairsLedDriver.cpp" />
   </ItemGroup>

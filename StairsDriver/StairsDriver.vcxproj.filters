@@ -27,12 +27,18 @@
     <ClInclude Include="StairsLedDriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InfraredDistanceRangingSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LedStrip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StairsLedDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InfraredDistanceRangingSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
