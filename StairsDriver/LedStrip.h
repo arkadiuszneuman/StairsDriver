@@ -12,7 +12,7 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-#define MAX_LED_BRIGHTNESS 4095
+#define MAX_LED_BRIGHTNESS 4096
 
 class LedStrip
 {

@@ -7,22 +7,24 @@ LedStrip::LedStrip(Adafruit_PWMServoDriver &pwm, int channel, int milisCountForF
 	this->milisCountForFullBrightness = milisCountForFullBrightness;
 	this->brightnessToSet = 0;
 	this->millisStart = 0;
-	this->currentBrightness = MAX_LED_BRIGHTNESS;
+	this->currentBrightness = 1;
 }
 
 void LedStrip::LightUp(int brightnessPercent)
 {
-	this->brightnessToSet = MAX_LED_BRIGHTNESS - (brightnessPercent * 1.0 * MAX_LED_BRIGHTNESS / 100);
+	this->brightnessToSet = brightnessPercent * 1.0 * MAX_LED_BRIGHTNESS / 100;
 	if (this->brightnessToSet <= 0)
 		this->brightnessToSet = 1;
-	this->brightnessGoingUp = this->brightnessToSet < this->currentBrightness;
+	if (this->brightnessToSet >= MAX_LED_BRIGHTNESS)
+		this->brightnessToSet = MAX_LED_BRIGHTNESS - 1;
+	this->brightnessGoingUp = this->brightnessToSet > this->currentBrightness;
 	Serial.print("Setting percent ");
 	Serial.println(brightnessPercent);
 	Serial.print("Setting brightness ");
 	Serial.println(brightnessToSet);
 	Serial.print("GoingUp ");
 	Serial.println(brightnessGoingUp);
-	delay(2000);
+	delay(3000);
 	this->millisStart = millis();
 }
 
@@ -41,7 +43,9 @@ void LedStrip::Update()
 		if (timeLeftPercent >= 100)
 		{
 			this->currentBrightness = this->brightnessToSet;
-			this->pwm.setPWM(this->channel, this->brightnessToSet, 0);
+			Serial.print("End current brightness ");
+			Serial.println(MAX_LED_BRIGHTNESS - currentBrightness);
+			this->pwm.setPWM(this->channel, MAX_LED_BRIGHTNESS - this->brightnessToSet, 0);
 			return;
 		}
 
@@ -49,13 +53,13 @@ void LedStrip::Update()
 		Serial.println(brightnessGoingUp);
 
 		if (this->brightnessGoingUp)
-			this->currentBrightness = MAX_LED_BRIGHTNESS - (timeLeftPercent * MAX_LED_BRIGHTNESS / 100);
-		else
 			this->currentBrightness = timeLeftPercent * MAX_LED_BRIGHTNESS / 100;
+		else
+			this->currentBrightness = MAX_LED_BRIGHTNESS - (timeLeftPercent * MAX_LED_BRIGHTNESS / 100);
 
 		Serial.print("Current brightness ");
-		Serial.println(currentBrightness);
-		this->pwm.setPWM(0, currentBrightness, 0);
+		Serial.println(MAX_LED_BRIGHTNESS - currentBrightness);
+		this->pwm.setPWM(0, MAX_LED_BRIGHTNESS - currentBrightness, 0);
 	}
 }
 
