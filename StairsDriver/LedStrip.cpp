@@ -7,15 +7,17 @@ LedStrip::LedStrip(Adafruit_PWMServoDriver &pwm, int channel, int milisCountForF
 	this->milisCountForFullBrightness = milisCountForFullBrightness;
 	this->brightnessToSet = 0;
 	this->millisStart = 0;
-	this->currentBrightness = 0;
+	this->currentBrightness = MAX_LED_BRIGHTNESS;
 }
 
 void LedStrip::LightUp(int brightnessPercent)
 {
-	this->brightnessToSet = brightnessPercent * 1.0 * MAX_LED_BRIGHTNESS / 100;
+	this->brightnessToSet = MAX_LED_BRIGHTNESS - (brightnessPercent * 1.0 * MAX_LED_BRIGHTNESS / 100);
 	if (this->brightnessToSet <= 0)
 		this->brightnessToSet = 1;
-	this->brightnessGoingUp = this->brightnessToSet > this->currentBrightness;
+	this->brightnessGoingUp = this->brightnessToSet < this->currentBrightness;
+	Serial.print("Setting percent ");
+	Serial.println(brightnessPercent);
 	Serial.print("Setting brightness ");
 	Serial.println(brightnessToSet);
 	Serial.print("GoingUp ");
@@ -47,9 +49,9 @@ void LedStrip::Update()
 		Serial.println(brightnessGoingUp);
 
 		if (this->brightnessGoingUp)
-			this->currentBrightness = timeLeftPercent * MAX_LED_BRIGHTNESS / 100;
-		else
 			this->currentBrightness = MAX_LED_BRIGHTNESS - (timeLeftPercent * MAX_LED_BRIGHTNESS / 100);
+		else
+			this->currentBrightness = timeLeftPercent * MAX_LED_BRIGHTNESS / 100;
 
 		Serial.print("Current brightness ");
 		Serial.println(currentBrightness);
