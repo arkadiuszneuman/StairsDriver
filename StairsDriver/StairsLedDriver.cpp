@@ -31,15 +31,15 @@ void StairsLedDriver::Update()
 
 		if (goingUp)
 		{
-			ledStrips[0]->LightUp(100);
-			ledStrips[1]->LightUp(100, 1000);
-			ledStrips[2]->LightUp(100, 2000);
+			ledStrips[0]->Fade(100);
+			ledStrips[1]->Fade(100, 1000);
+			ledStrips[2]->Fade(100, 2000);
 		}
 		else
 		{
-			ledStrips[0]->LightUp(0);
-			ledStrips[1]->LightUp(0, 1000);
-			ledStrips[2]->LightUp(0, 2000);
+			ledStrips[0]->Fade(0);
+			ledStrips[1]->Fade(0, 1000);
+			ledStrips[2]->Fade(0, 2000);
 		}
 
 	}

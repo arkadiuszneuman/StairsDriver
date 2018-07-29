@@ -28,7 +28,7 @@ private:
 	void SetPWM(int pwmValue);
 public:
 	LedStrip(Adafruit_PWMServoDriver &pwm, int channel, int milisCountForFullBrightness);
-	void LightUp(int brightnessPercent, int delay = 0);
+	void Fade(int brightnessPercent, int delay = 0);
 	void Update();
 };
 

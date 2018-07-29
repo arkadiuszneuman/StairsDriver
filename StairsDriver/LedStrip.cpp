@@ -10,7 +10,7 @@ LedStrip::LedStrip(Adafruit_PWMServoDriver &pwm, int channel, int milisCountForF
 	this->currentBrightness = 1;
 }
 
-void LedStrip::LightUp(int brightnessPercent, int delay)
+void LedStrip::Fade(int brightnessPercent, int delay)
 {
 	this->brightnessToSet = brightnessPercent * 1.0 * MAX_LED_BRIGHTNESS / 100;
 	this->brightnessGoingUp = this->brightnessToSet > this->currentBrightness;
