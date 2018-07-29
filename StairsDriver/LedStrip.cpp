@@ -8,6 +8,7 @@ LedStrip::LedStrip(Adafruit_PWMServoDriver &pwm, int channel, int milisCountForF
 	this->brightnessToSet = 0;
 	this->millisStart = 0;
 	this->currentBrightness = 1;
+	this->SetPWM(0);
 }
 
 void LedStrip::Fade(int brightnessPercent, int delay)
