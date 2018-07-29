@@ -39,9 +39,9 @@ void LedStrip::Update()
 		double timeLeftPercent = difference * 1.0 * 100 / this->milisCountForFullBrightness;
 
 		if (this->brightnessGoingUp)
-			this->currentBrightness = timeLeftPercent * MAX_LED_BRIGHTNESS / 100;
+			this->currentBrightness += timeLeftPercent * MAX_LED_BRIGHTNESS / 100;
 		else
-			this->currentBrightness = MAX_LED_BRIGHTNESS - (timeLeftPercent * MAX_LED_BRIGHTNESS / 100);
+			this->currentBrightness -= timeLeftPercent * MAX_LED_BRIGHTNESS / 100;
 
 		if (timeLeftPercent >= 100 ||
 			(brightnessGoingUp && currentBrightness >= brightnessToSet) ||

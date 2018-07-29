@@ -32,17 +32,38 @@ void StairsLedDriver::Update()
 		{
 			for (int i = 0; i < stripsCount; ++i)
 			{
-				ledStrips[i]->Fade(50, i * 1000);
+				ledStrips[i]->Fade(5, i * 1000);
 			}
 		}
 		else if (state == 2)
 		{
 			for (int i = 0; i < stripsCount; ++i)
 			{
-				ledStrips[i]->Fade(100, i * 1000);
+				ledStrips[i]->Fade(60, i * 1000);
 			}
 		}
 		else if (state == 3)
+		{
+			for (int i = 0; i < stripsCount; ++i)
+			{
+				ledStrips[i]->Fade(30, i * 1000);
+			}
+		}
+		else if (state == 4)
+		{
+			for (int i = 0; i < stripsCount; ++i)
+			{
+				ledStrips[i]->Fade(100, i * 1000);
+			}
+		}
+		else if (state == 5)
+		{
+			for (int i = 0; i < stripsCount; ++i)
+			{
+				ledStrips[i]->Fade(50, i * 1000);
+			}
+		}
+		else if (state == 6)
 		{
 			for (int i = 0; i < stripsCount; ++i)
 			{
@@ -51,7 +72,7 @@ void StairsLedDriver::Update()
 		}
 
 		++state;
-		if (state > 3)
+		if (state > 6)
 			state = 1;
 	}
 }
