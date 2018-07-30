@@ -24,6 +24,7 @@ private:
 	int brightnessToSet = 0;
 	bool brightnessGoingUp = true;
 	bool isFading = false;
+	double previousTimeLeftPercent = 0;
 	long millisStart = 0;
 	void SetPWM(int pwmValue);
 public:

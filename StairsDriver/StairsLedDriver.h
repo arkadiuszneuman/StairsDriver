@@ -14,7 +14,7 @@
 	#include "WProgram.h"
 #endif
 
-#define MILLIS_COUNT_FOR_FULL_BRIGHTNESS 1000
+#define MILLIS_COUNT_FOR_FULL_BRIGHTNESS 10000
 
 class StairsLedDriver
 {
@@ -22,6 +22,7 @@ private:
 	Adafruit_PWMServoDriver pwm;
 	LedStrip** ledStrips;
 	InfraredDistanceRangingSensor* bottomStairsSensor;
+	InfraredDistanceRangingSensor* upperStairsSensor;
 	int stripsCount;
 	unsigned long int temp;
 	int state;

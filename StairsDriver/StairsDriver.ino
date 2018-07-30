@@ -1,8 +1,3 @@
-
-/***************************************************
-This is an example for our Adafruit 16-channel PWM & Servo driver
-****************************************************/
-
 #include "StairsLedDriver.h"
 
 StairsLedDriver stairsLedDriver;

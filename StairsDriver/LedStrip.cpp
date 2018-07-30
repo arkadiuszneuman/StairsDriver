@@ -17,6 +17,7 @@ void LedStrip::Fade(int brightnessPercent, int delay)
 	this->brightnessGoingUp = this->brightnessToSet > this->currentBrightness;
 	this->millisStart = millis() + delay;
 	this->isFading = true;
+	this->previousTimeLeftPercent = 0;
 
 	Serial.print("Setting percent ");
 	Serial.println(brightnessPercent);
@@ -37,11 +38,13 @@ void LedStrip::Update()
 		long difference = currentMillis - millisStart;
 
 		double timeLeftPercent = difference * 1.0 * 100 / this->milisCountForFullBrightness;
-
+		Serial.println(timeLeftPercent);
 		if (this->brightnessGoingUp)
-			this->currentBrightness += timeLeftPercent * MAX_LED_BRIGHTNESS / 100;
+			this->currentBrightness += (timeLeftPercent - this->previousTimeLeftPercent) * MAX_LED_BRIGHTNESS / 100;
 		else
-			this->currentBrightness -= timeLeftPercent * MAX_LED_BRIGHTNESS / 100;
+			this->currentBrightness -= (timeLeftPercent - this->previousTimeLeftPercent) * MAX_LED_BRIGHTNESS / 100;
+
+		this->previousTimeLeftPercent = timeLeftPercent;
 
 		if (timeLeftPercent >= 100 ||
 			(brightnessGoingUp && currentBrightness >= brightnessToSet) ||
