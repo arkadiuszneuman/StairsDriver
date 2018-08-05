@@ -1,16 +1,22 @@
 #include "StairsLedDriver.h"
 #include "Logger.h"
 #include "OtaDriver.h"
+#include "ConfigManager.h"
 
 StairsLedDriver stairsLedDriver;
 InfraredDistanceRangingSensor bottomStairsSensor(14); //D5
 InfraredDistanceRangingSensor upperStairsSensor(12); //D6
 Logger logger;
 OtaDriver otaDriver;
+ConfigManager configManager;
 
 void setup() {
 	logger.Init();
 	stairsLedDriver.Begin(logger, 3);
+
+	configManager.Init(logger);
+	configManager.LoadConfig();
+
 	otaDriver.Init(logger);
 }
 
