@@ -2,7 +2,7 @@
 
 void Logger::Init()
 {
-	Serial.begin(9600);
+	Serial.begin(115200);
 }
 
 void Logger::Log(String text)
