@@ -5,9 +5,6 @@ LedStrip::LedStrip(Adafruit_PWMServoDriver &pwm, int channel, int milisCountForF
 	this->pwm = pwm;
 	this->channel = channel;
 	this->milisCountForFullBrightness = milisCountForFullBrightness;
-	this->brightnessToSet = 0;
-	this->millisStart = 0;
-	this->currentBrightness = 1;
 	this->SetPWM(0);
 }
 
@@ -16,7 +13,7 @@ void LedStrip::Fade(int brightnessPercent, int delay)
 	this->brightnessToSet = brightnessPercent * 1.0 * MAX_LED_BRIGHTNESS / 100;
 	this->brightnessGoingUp = this->brightnessToSet > this->currentBrightness;
 	this->millisStart = millis() + delay;
-	this->isFading = true;
+	this->isFadingPlanned = true;
 	this->previousTimeLeftPercent = 0;
 
 	Serial.print("Setting percent ");
@@ -29,12 +26,13 @@ void LedStrip::Fade(int brightnessPercent, int delay)
 
 void LedStrip::Update()
 {
-	if (!this->isFading)
+	if (!this->isFadingPlanned)
 		return;
 
 	long currentMillis = millis();
 	if (currentMillis >= millisStart)
 	{
+		this->isFading = true;
 		long difference = currentMillis - millisStart;
 
 		double timeLeftPercent = difference * 1.0 * 100 / this->milisCountForFullBrightness;
@@ -51,7 +49,7 @@ void LedStrip::Update()
 			(!brightnessGoingUp && currentBrightness <= brightnessToSet))
 		{
 			this->currentBrightness = this->brightnessToSet;
-			this->isFading = false;
+			this->isFadingPlanned = this->isFading = false;
 			this->millisStart = 0;
 		}
 
@@ -76,4 +74,12 @@ void LedStrip::SetPWM(int pwmValue)
 	this->pwm.setPWM(this->channel, pwmValue, 0);
 }
 
+int LedStrip::GetCurrentBrightness()
+{
+	return this->currentBrightness;
+}
 
+bool LedStrip::IsFading()
+{
+	return this->isFading;
+}
