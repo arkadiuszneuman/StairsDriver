@@ -32,8 +32,8 @@ public:
 	LedStrip(Adafruit_PWMServoDriver &pwm, int channel, int milisCountForFullBrightness);
 	void Fade(int brightnessPercent, int delay = 0);
 	void Update();
-	int GetCurrentBrightness();
 	bool IsFading();
+	bool IsBrightnessGoingUp();
 };
 
 #endif

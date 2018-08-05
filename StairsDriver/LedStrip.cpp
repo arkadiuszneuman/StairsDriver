@@ -74,9 +74,9 @@ void LedStrip::SetPWM(int pwmValue)
 	this->pwm.setPWM(this->channel, pwmValue, 0);
 }
 
-int LedStrip::GetCurrentBrightness()
+bool LedStrip::IsBrightnessGoingUp()
 {
-	return this->currentBrightness;
+	return this->brightnessGoingUp;
 }
 
 bool LedStrip::IsFading()

@@ -25,12 +25,12 @@ void StairsLedDriver::GoUp()
 
 		for (int i = 0; i < stairsCount; ++i)
 		{
-			if (!ledStrips[i]->IsFading())
+			if (!ledStrips[i]->IsFading() || !ledStrips[i]->IsBrightnessGoingUp())
 				ledStrips[i]->Fade(100, i * this->delayForNextStairToSwitchOn);
 		}
-
-		this->timeOfLastSensorDetected = millis();
 	}
+
+	this->timeOfLastSensorDetected = millis();
 }
 
 void StairsLedDriver::GoDown()
@@ -45,12 +45,12 @@ void StairsLedDriver::GoDown()
 		for (int i = 0; i < stairsCount; ++i)
 		{
 			int currentLedStrip = stairsCount - i - 1;
-			if (!ledStrips[currentLedStrip]->IsFading())
+			if (!ledStrips[currentLedStrip]->IsFading() || !ledStrips[currentLedStrip]->IsBrightnessGoingUp())
 				ledStrips[currentLedStrip]->Fade(100, i * this->delayForNextStairToSwitchOn);
 		}
-
-		this->timeOfLastSensorDetected = millis();
 	}
+
+	this->timeOfLastSensorDetected = millis();
 }
 
 void StairsLedDriver::Update()

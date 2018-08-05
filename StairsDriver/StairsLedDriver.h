@@ -31,7 +31,7 @@ private:
 	int delayForNextStairToSwitchOn = 2000;
 	int state = STAIRS_OFF;
 public:
-	void Begin(int stripsCount);
+	void Begin(int stairsCount);
 	void Update();
 	void GoUp();
 	void GoDown();
