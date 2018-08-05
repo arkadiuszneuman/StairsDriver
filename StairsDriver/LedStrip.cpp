@@ -1,7 +1,8 @@
 #include "LedStrip.h"
 
-LedStrip::LedStrip(Adafruit_PWMServoDriver &pwm, int channel, int milisCountForFullBrightness)
+LedStrip::LedStrip(Logger &logger, Adafruit_PWMServoDriver &pwm, int channel, int milisCountForFullBrightness)
 {
+	this->logger = logger;
 	this->pwm = pwm;
 	this->channel = channel;
 	this->milisCountForFullBrightness = milisCountForFullBrightness;
@@ -16,12 +17,12 @@ void LedStrip::Fade(int brightnessPercent, int delay)
 	this->isFadingPlanned = true;
 	this->previousTimeLeftPercent = 0;
 
-	Serial.print("Setting percent ");
-	Serial.println(brightnessPercent);
-	Serial.print("Setting brightness ");
-	Serial.println(brightnessToSet);
-	Serial.print("GoingUp ");
-	Serial.println(brightnessGoingUp);
+	logger.Log("Setting percent ");
+	logger.LogLine(brightnessPercent);
+	logger.Log("Setting brightness ");
+	logger.LogLine(brightnessToSet);
+	logger.Log("GoingUp ");
+	logger.LogLine(brightnessGoingUp);
 }
 
 void LedStrip::Update()
@@ -66,10 +67,10 @@ void LedStrip::SetPWM(int pwmValue)
 	else
 		pwmValue = MAX_LED_BRIGHTNESS - pwmValue;
 
-	Serial.print("[");
-	Serial.print(this->channel);
-	Serial.print("] current brightness: ");
-	Serial.println(pwmValue);
+	logger.Log("[");
+	logger.Log(this->channel);
+	logger.Log("] current brightness: ");
+	logger.LogLine(pwmValue);
 
 	this->pwm.setPWM(this->channel, pwmValue, 0);
 }

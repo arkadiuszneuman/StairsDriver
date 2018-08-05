@@ -11,6 +11,7 @@
 
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
+#include "Logger.h"
 
 #define MAX_LED_BRIGHTNESS 4096
 
@@ -18,6 +19,7 @@ class LedStrip
 {
 private:
 	Adafruit_PWMServoDriver pwm;
+	Logger logger;
 	int milisCountForFullBrightness;
 	int channel;
 	int currentBrightness = 0;
@@ -29,7 +31,7 @@ private:
 	long millisStart = 0;
 	void SetPWM(int pwmValue);
 public:
-	LedStrip(Adafruit_PWMServoDriver &pwm, int channel, int milisCountForFullBrightness);
+	LedStrip(Logger &logger, Adafruit_PWMServoDriver &pwm, int channel, int milisCountForFullBrightness);
 	void Fade(int brightnessPercent, int delay = 0);
 	void Update();
 	bool IsFading();

@@ -1,17 +1,32 @@
 #include "StairsLedDriver.h"
 
-void StairsLedDriver::Begin(int stripsCount)
+void StairsLedDriver::Begin(Logger &logger, int stripsCount)
 {
+	this->logger = logger;
 	pwm.begin();
 	pwm.setPWMFreq(1000);
 
 	this->stairsCount = stripsCount;
 	this->ledStrips = new LedStrip*[stripsCount];
 	for (int i = 0; i < stripsCount; i++)
-		this->ledStrips[i] = new LedStrip(pwm, i, MILLIS_COUNT_FOR_FULL_BRIGHTNESS);
+		this->ledStrips[i] = new LedStrip(logger, pwm, i, MILLIS_COUNT_FOR_FULL_BRIGHTNESS);
 
-	LedStrip aaa(pwm, 1, MILLIS_COUNT_FOR_FULL_BRIGHTNESS);
-	LedStrip bbb(pwm, 2, MILLIS_COUNT_FOR_FULL_BRIGHTNESS);
+	//switch off all leds
+	for (int i = 0; i < 16; i++)
+	{
+		pwm.setPWM(i, 0, 4096);
+	}
+
+	//init on
+	int middleStair = stairsCount / 2;
+	for (int i = 0; i <= middleStair; ++i)
+	{
+		ledStrips[i]
+			->Fade(100, i * this->delayForNextStairToSwitchOn);
+
+		ledStrips[stairsCount - i - 1]
+			->Fade(100, i * this->delayForNextStairToSwitchOn);
+	}
 }
 
 void StairsLedDriver::GoUp()

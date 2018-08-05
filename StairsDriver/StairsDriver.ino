@@ -1,12 +1,14 @@
 #include "StairsLedDriver.h"
+#include "Logger.h"
 
 StairsLedDriver stairsLedDriver;
 InfraredDistanceRangingSensor bottomStairsSensor(14); //D5
 InfraredDistanceRangingSensor upperStairsSensor(12); //D6
+Logger logger;
 
 void setup() {
-	Serial.begin(9600);
-	stairsLedDriver.Begin(3);
+	logger.Init();
+	stairsLedDriver.Begin(logger, 3);
 }
 
 void loop() {
@@ -14,13 +16,13 @@ void loop() {
 
 	if (bottomStairsSensor.IsCollisionDetected())
 	{
-		Serial.println("Bottom stairs collision detected");
+		logger.LogLine("Bottom stairs collision detected");
 		stairsLedDriver.GoUp();
 	}
 
 	if (upperStairsSensor.IsCollisionDetected())
 	{
-		Serial.println("Upper stairs collision detected");
+		logger.LogLine("Upper stairs collision detected");
 		stairsLedDriver.GoDown();
 	}
 }

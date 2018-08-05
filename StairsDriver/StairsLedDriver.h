@@ -7,6 +7,7 @@
 #include <Adafruit_PWMServoDriver.h>
 #include "LedStrip.h"
 #include "InfraredDistanceRangingSensor.h"
+#include "Logger.h"
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "arduino.h"
@@ -25,13 +26,14 @@ class StairsLedDriver
 private:
 	Adafruit_PWMServoDriver pwm;
 	LedStrip** ledStrips;
+	Logger logger;
 	int stairsCount;
 	unsigned long int timeOfLastSensorDetected = 0;
 	unsigned long int timeForLedsSwitchedOn = 15000;
 	int delayForNextStairToSwitchOn = 2000;
 	int state = STAIRS_OFF;
 public:
-	void Begin(int stairsCount);
+	void Begin(Logger &logger, int stairsCount);
 	void Update();
 	void GoUp();
 	void GoDown();

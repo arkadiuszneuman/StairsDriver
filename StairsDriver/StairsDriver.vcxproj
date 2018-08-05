@@ -84,12 +84,14 @@
   <ItemGroup>
     <ClInclude Include="InfraredDistanceRangingSensor.h" />
     <ClInclude Include="LedStrip.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="StairsLedDriver.h" />
     <ClInclude Include="__vm\.StairsDriver.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InfraredDistanceRangingSensor.cpp" />
     <ClCompile Include="LedStrip.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="StairsLedDriver.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
