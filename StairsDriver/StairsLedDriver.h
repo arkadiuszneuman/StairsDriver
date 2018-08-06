@@ -8,6 +8,7 @@
 #include "LedStrip.h"
 #include "InfraredDistanceRangingSensor.h"
 #include "Logger.h"
+#include "ConfigManager.h"
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "arduino.h"
@@ -15,7 +16,6 @@
 	#include "WProgram.h"
 #endif
 
-#define MILLIS_COUNT_FOR_FULL_BRIGHTNESS 10000
 #define STAIRS_OFF 0
 #define STAIRS_GO_UP 1
 #define STAIRS_GO_DOWN 2
@@ -29,11 +29,12 @@ private:
 	Logger logger;
 	int stairsCount;
 	unsigned long int timeOfLastSensorDetected = 0;
-	unsigned long int timeForLedsSwitchedOn = 15000;
+	int timeForLedsSwitchedOn = 15000;
 	int delayForNextStairToSwitchOn = 2000;
+	int millisCountForFullBrightness = 10000;
 	int state = STAIRS_OFF;
 public:
-	void Begin(Logger &logger, int stairsCount);
+	void Begin(Logger &logger, ConfigManager &configManager);
 	void Update();
 	void GoUp();
 	void GoDown();

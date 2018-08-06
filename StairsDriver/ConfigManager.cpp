@@ -20,9 +20,17 @@ bool ConfigManager::SaveConfig()
 
 	json["wifiname"] = WifiName;
 	json["wifipass"] = WifiPass;
-	json["infourl"] = InfoUrl;
-	json["port"] = Port;
-	json["uri"] = Uri;
+	json["timeForLedsSwitchedOn"] = TimeForLedsSwitchedOn;
+	json["delayForNextStairToSwitchOn"] = DelayForNextStairToSwitchOn;
+	json["millisCountForFullBrightness"] = MillisCountForFullBrightness;
+	json["stairsCount"] = StairsCount;
+
+	json["infoUrlSensorUp"] = InfoUrlSensorUp;
+	json["portSensorUp"] = PortSensorUp;
+	json["uriSensorUp"] = UriSensorUp;
+	json["infoUrlSensorDown"] = InfoUrlSensorDown;
+	json["portSensorDown"] = PortSensorDown;
+	json["uriSensorDown"] = UriSensorDown;
 
 	File configFile = SPIFFS.open("/config.json", "w");
 	if (!configFile) 
@@ -87,17 +95,33 @@ bool ConfigManager::LoadConfig()
 
 	const char* wifiname = json["wifiname"];
 	const char* wifipass = json["wifipass"];
-	const char* infourl = json["infourl"];
-	const char* port = json["port"];
-	const char* uri = json["uri"];
+	const char* timeForLedsSwitchedOn = json["timeForLedsSwitchedOn"];
+	const char* delayForNextStairToSwitchOn = json["delayForNextStairToSwitchOn"];
+	const char* millisCountForFullBrightness = json["millisCountForFullBrightness"];
+	const char* stairsCount = json["stairsCount"];
+
+	const char* infoUrlSensorUp = json["infoUrlSensorUp"];
+	const char* portSensorUp = json["portSensorUp"];
+	const char* uriSensorUp = json["uriSensorUp"];
+	const char* infoUrlSensorDown = json["infoUrlSensorDown"];
+	const char* portSensorDown = json["portSensorDown"];
+	const char* uriSensorDown = json["uriSensorDown"];
 
 	logger.LogLine("Loaded config");
 	
 	WifiName = wifiname;
 	WifiPass = wifipass;
-	InfoUrl = infourl;
-	Port = port;
-	Uri = uri;
+	TimeForLedsSwitchedOn = atoi(timeForLedsSwitchedOn);
+	DelayForNextStairToSwitchOn = atoi(delayForNextStairToSwitchOn);
+	MillisCountForFullBrightness = atoi(millisCountForFullBrightness);
+	StairsCount = atoi(stairsCount);
+
+	InfoUrlSensorUp = infoUrlSensorUp;
+	PortSensorUp = portSensorUp;
+	UriSensorUp = uriSensorUp;
+	InfoUrlSensorDown = infoUrlSensorDown;
+	PortSensorDown = portSensorDown;
+	UriSensorDown = uriSensorDown;
 
 	configFile.close();
 

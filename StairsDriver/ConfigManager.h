@@ -21,9 +21,16 @@ public:
 
 	String WifiName = "";
 	String WifiPass = "";
-	String InfoUrl = "";
-	String Port = "";
-	String Uri = "";
+	String InfoUrlSensorUp = "";
+	int TimeForLedsSwitchedOn = 15000;
+	int DelayForNextStairToSwitchOn = 2000;
+	int MillisCountForFullBrightness = 10000;
+	int StairsCount = 16;
+	String PortSensorUp = "";
+	String UriSensorUp = "";
+	String InfoUrlSensorDown = "";
+	String PortSensorDown = "";
+	String UriSensorDown = "";
 };
 
 #endif

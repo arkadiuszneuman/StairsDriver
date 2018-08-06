@@ -1,15 +1,19 @@
 #include "StairsLedDriver.h"
 
-void StairsLedDriver::Begin(Logger &logger, int stripsCount)
+void StairsLedDriver::Begin(Logger &logger, ConfigManager &configManager)
 {
 	this->logger = logger;
+	this->timeForLedsSwitchedOn = configManager.TimeForLedsSwitchedOn;
+	this->delayForNextStairToSwitchOn = configManager.DelayForNextStairToSwitchOn;
+	this->millisCountForFullBrightness = configManager.MillisCountForFullBrightness;
+	this->stairsCount = configManager.StairsCount;
+
 	pwm.begin();
 	pwm.setPWMFreq(1000);
 
-	this->stairsCount = stripsCount;
-	this->ledStrips = new LedStrip*[stripsCount];
-	for (int i = 0; i < stripsCount; i++)
-		this->ledStrips[i] = new LedStrip(logger, pwm, i, MILLIS_COUNT_FOR_FULL_BRIGHTNESS);
+	this->ledStrips = new LedStrip*[this->stairsCount];
+	for (int i = 0; i < this->stairsCount; i++)
+		this->ledStrips[i] = new LedStrip(logger, pwm, i, this->millisCountForFullBrightness);
 
 	//switch off all leds
 	for (int i = 0; i < 16; i++)

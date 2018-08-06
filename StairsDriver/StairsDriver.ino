@@ -12,7 +12,7 @@ ConfigManager configManager;
 
 void setup() {
 	logger.Init();
-	stairsLedDriver.Begin(logger, 3);
+	stairsLedDriver.Begin(logger, configManager);
 
 	configManager.Init(logger);
 	configManager.LoadConfig();
