@@ -33,7 +33,7 @@ bool ConfigManager::SaveConfig()
 	json["uriSensorDown"] = UriSensorDown;
 
 	File configFile = SPIFFS.open("/config.json", "w");
-	if (!configFile) 
+	if (!configFile)
 	{
 		logger.LogLine("Failed to open config file for writing");
 		return false;
@@ -69,7 +69,7 @@ bool ConfigManager::LoadConfig()
 	}
 
 	size_t size = configFile.size();
-	if (size > 1024) 
+	if (size > 1024)
 	{
 		logger.LogLine("Config file size is too large");
 		return false;
@@ -108,20 +108,32 @@ bool ConfigManager::LoadConfig()
 	const char* uriSensorDown = json["uriSensorDown"];
 
 	logger.LogLine("Loaded config");
-	
-	WifiName = wifiname;
-	WifiPass = wifipass;
-	TimeForLedsSwitchedOn = atoi(timeForLedsSwitchedOn);
-	DelayForNextStairToSwitchOn = atoi(delayForNextStairToSwitchOn);
-	MillisCountForFullBrightness = atoi(millisCountForFullBrightness);
-	StairsCount = atoi(stairsCount);
 
-	InfoUrlSensorUp = infoUrlSensorUp;
-	PortSensorUp = portSensorUp;
-	UriSensorUp = uriSensorUp;
-	InfoUrlSensorDown = infoUrlSensorDown;
-	PortSensorDown = portSensorDown;
-	UriSensorDown = uriSensorDown;
+	if (wifiname)
+		WifiName = wifiname;
+	if (wifipass)
+		WifiPass = wifipass;
+	if (timeForLedsSwitchedOn)
+		TimeForLedsSwitchedOn = atoi(timeForLedsSwitchedOn);
+	if (delayForNextStairToSwitchOn)
+		DelayForNextStairToSwitchOn = atoi(delayForNextStairToSwitchOn);
+	if (millisCountForFullBrightness)
+		MillisCountForFullBrightness = atoi(millisCountForFullBrightness);
+	if (stairsCount)
+		StairsCount = atoi(stairsCount);
+
+	if (infoUrlSensorUp)
+		InfoUrlSensorUp = infoUrlSensorUp;
+	if (portSensorUp)
+		PortSensorUp = portSensorUp;
+	if (uriSensorUp)
+		UriSensorUp = uriSensorUp;
+	if (infoUrlSensorDown)
+		InfoUrlSensorDown = infoUrlSensorDown;
+	if (portSensorDown)
+		PortSensorDown = portSensorDown;
+	if (uriSensorDown)
+		UriSensorDown = uriSensorDown;
 
 	configFile.close();
 

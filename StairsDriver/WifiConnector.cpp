@@ -8,7 +8,7 @@ void WifiConnector::Init(Logger &logger)
 
 void WifiConnector::ConnectToWifi(ConfigManager &configManager)
 {
-	if (configManager.WifiName == "")
+	if (configManager.WifiName == "" || !configManager.WifiName)
 	{
 		CreateSoftAP();
 		return;
