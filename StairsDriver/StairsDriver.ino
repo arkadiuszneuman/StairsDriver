@@ -3,6 +3,7 @@
 #include "OtaDriver.h"
 #include "ConfigManager.h"
 #include "WifiConnector.h"
+#include "HttpSite.h"
 
 StairsLedDriver stairsLedDriver;
 InfraredDistanceRangingSensor bottomStairsSensor(14); //D5
@@ -11,6 +12,7 @@ Logger logger;
 OtaDriver otaDriver;
 ConfigManager configManager;
 WifiConnector wifiConnector;
+HttpSite httpSite;
 
 void setup() {
 	logger.Init();
@@ -21,11 +23,13 @@ void setup() {
 
 	wifiConnector.Init(logger);
 	wifiConnector.ConnectToWifi(configManager);
+	httpSite.Init(configManager, logger);
 
 	otaDriver.Init(logger);
 }
 
 void loop() {
+	httpSite.Update();
 	stairsLedDriver.Update();
 	otaDriver.Update();
 

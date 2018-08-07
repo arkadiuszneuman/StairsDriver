@@ -82,7 +82,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="config.h" />
     <ClInclude Include="ConfigManager.h" />
+    <ClInclude Include="HttpSite.h" />
+    <ClInclude Include="index.h" />
     <ClInclude Include="InfraredDistanceRangingSensor.h" />
     <ClInclude Include="LedStrip.h" />
     <ClInclude Include="Logger.h" />
@@ -93,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConfigManager.cpp" />
+    <ClCompile Include="HttpSite.cpp" />
     <ClCompile Include="InfraredDistanceRangingSensor.cpp" />
     <ClCompile Include="LedStrip.cpp" />
     <ClCompile Include="Logger.cpp" />
