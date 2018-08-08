@@ -16,7 +16,6 @@ HttpSite httpSite;
 
 void setup() {
 	logger.Init();
-	stairsLedDriver.Begin(logger, configManager);
 
 	configManager.Init(logger);
 	configManager.LoadConfig();
@@ -26,6 +25,7 @@ void setup() {
 	httpSite.Init(configManager, logger);
 
 	otaDriver.Init(logger);
+	stairsLedDriver.Begin(logger, configManager);
 }
 
 void loop() {

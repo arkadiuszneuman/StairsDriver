@@ -7,7 +7,8 @@ void StairsLedDriver::Begin(Logger &logger, ConfigManager &configManager)
 	this->delayForNextStairToSwitchOn = configManager.DelayForNextStairToSwitchOn;
 	this->millisCountForFullBrightness = configManager.MillisCountForFullBrightness;
 	this->stairsCount = configManager.StairsCount;
-
+	this->logger.Log("Stairs count: ");
+	this->logger.LogLine(this->stairsCount);
 	pwm.begin();
 	pwm.setPWMFreq(1000);
 
@@ -19,17 +20,6 @@ void StairsLedDriver::Begin(Logger &logger, ConfigManager &configManager)
 	for (int i = 0; i < 16; i++)
 	{
 		pwm.setPWM(i, 0, 4096);
-	}
-
-	//init on
-	int middleStair = stairsCount / 2;
-	for (int i = 0; i <= middleStair; ++i)
-	{
-		ledStrips[i]
-			->Fade(100, i * this->delayForNextStairToSwitchOn);
-
-		ledStrips[stairsCount - i - 1]
-			->Fade(100, i * this->delayForNextStairToSwitchOn);
 	}
 }
 

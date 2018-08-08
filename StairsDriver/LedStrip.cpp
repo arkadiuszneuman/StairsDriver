@@ -37,24 +37,27 @@ void LedStrip::Update()
 		long difference = currentMillis - millisStart;
 
 		double timeLeftPercent = difference * 1.0 * 100 / this->milisCountForFullBrightness;
-		Serial.println(timeLeftPercent);
-		if (this->brightnessGoingUp)
-			this->currentBrightness += (timeLeftPercent - this->previousTimeLeftPercent) * MAX_LED_BRIGHTNESS / 100;
-		else
-			this->currentBrightness -= (timeLeftPercent - this->previousTimeLeftPercent) * MAX_LED_BRIGHTNESS / 100;
 
-		this->previousTimeLeftPercent = timeLeftPercent;
-
-		if (timeLeftPercent >= 100 ||
-			(brightnessGoingUp && currentBrightness >= brightnessToSet) ||
-			(!brightnessGoingUp && currentBrightness <= brightnessToSet))
+		if (timeLeftPercent - this->previousTimeLeftPercent >= 1)
 		{
-			this->currentBrightness = this->brightnessToSet;
-			this->isFadingPlanned = this->isFading = false;
-			this->millisStart = 0;
-		}
+			if (this->brightnessGoingUp)
+				this->currentBrightness += (timeLeftPercent - this->previousTimeLeftPercent) * MAX_LED_BRIGHTNESS / 100;
+			else
+				this->currentBrightness -= (timeLeftPercent - this->previousTimeLeftPercent) * MAX_LED_BRIGHTNESS / 100;
 
-		SetPWM(this->currentBrightness);
+			this->previousTimeLeftPercent = timeLeftPercent;
+
+			if (timeLeftPercent >= 100 ||
+				(brightnessGoingUp && currentBrightness >= brightnessToSet) ||
+				(!brightnessGoingUp && currentBrightness <= brightnessToSet))
+			{
+				this->currentBrightness = this->brightnessToSet;
+				this->isFadingPlanned = this->isFading = false;
+				this->millisStart = 0;
+			}
+
+			SetPWM(this->currentBrightness);
+		}
 	}
 }
 
