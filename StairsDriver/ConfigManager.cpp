@@ -32,6 +32,23 @@ bool ConfigManager::SaveConfig()
 	json["portSensorDown"] = PortSensorDown;
 	json["uriSensorDown"] = UriSensorDown;
 
+	json["channel1"] = Channel1;
+	json["channel2"] = Channel2;
+	json["channel3"] = Channel3;
+	json["channel4"] = Channel4;
+	json["channel5"] = Channel5;
+	json["channel6"] = Channel6;
+	json["channel7"] = Channel7;
+	json["channel8"] = Channel8;
+	json["channel9"] = Channel9;
+	json["channel10"] = Channel10;
+	json["channel11"] = Channel11;
+	json["channel12"] = Channel12;
+	json["channel13"] = Channel13;
+	json["channel14"] = Channel14;
+	json["channel15"] = Channel15;
+	json["channel16"] = Channel16;
+
 	File configFile = SPIFFS.open("/config.json", "w");
 	if (!configFile)
 	{
@@ -107,6 +124,23 @@ bool ConfigManager::LoadConfig()
 	const char* portSensorDown = json["portSensorDown"];
 	const char* uriSensorDown = json["uriSensorDown"];
 
+	const char* channel1 = json["channel1"];
+	const char* channel2 = json["channel2"];
+	const char* channel3 = json["channel3"];
+	const char* channel4 = json["channel4"];
+	const char* channel5 = json["channel5"];
+	const char* channel6 = json["channel6"];
+	const char* channel7 = json["channel7"];
+	const char* channel8 = json["channel8"];
+	const char* channel9 = json["channel9"];
+	const char* channel10 = json["channel10"];
+	const char* channel11 = json["channel11"];
+	const char* channel12 = json["channel12"];
+	const char* channel13 = json["channel13"];
+	const char* channel14 = json["channel14"];
+	const char* channel15 = json["channel15"];
+	const char* channel16 = json["channel16"];
+
 	logger.LogLine("Loaded config");
 
 	if (wifiname)
@@ -134,6 +168,39 @@ bool ConfigManager::LoadConfig()
 		PortSensorDown = portSensorDown;
 	if (uriSensorDown)
 		UriSensorDown = uriSensorDown;
+
+	if (channel1)
+		Channel1 = atoi(channel1);
+	if (channel2)
+		Channel2 = atoi(channel2);
+	if (channel3)
+		Channel3 = atoi(channel3);
+	if (channel4)
+		Channel4 = atoi(channel4);
+	if (channel5)
+		Channel5 = atoi(channel5);
+	if (channel6)
+		Channel6 = atoi(channel6);
+	if (channel7)
+		Channel7 = atoi(channel7);
+	if (channel8)
+		Channel8 = atoi(channel8);
+	if (channel9)
+		Channel9 = atoi(channel9);
+	if (channel10)
+		Channel10 = atoi(channel10);
+	if (channel11)
+		Channel11 = atoi(channel11);
+	if (channel12)
+		Channel12 = atoi(channel12);
+	if (channel13)
+		Channel13 = atoi(channel13);
+	if (channel14)
+		Channel14 = atoi(channel14);
+	if (channel15)
+		Channel15 = atoi(channel15);
+	if (channel16)
+		Channel16 = atoi(channel16);
 
 	configFile.close();
 

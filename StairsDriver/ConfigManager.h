@@ -31,6 +31,23 @@ public:
 	String InfoUrlSensorDown = "";
 	String PortSensorDown = "";
 	String UriSensorDown = "";
+
+	short Channel1 = 0;
+	short Channel2 = 1;
+	short Channel3 = 2;
+	short Channel4 = 3;
+	short Channel5 = 4;
+	short Channel6 = 5;
+	short Channel7 = 6;
+	short Channel8 = 7;
+	short Channel9 = 8;
+	short Channel10 = 9;
+	short Channel11 = 10;
+	short Channel12 = 11;
+	short Channel13 = 12;
+	short Channel14 = 13;
+	short Channel15 = 14;
+	short Channel16 = 15;
 };
 
 #endif

@@ -4,7 +4,7 @@ const char page_config[] PROGMEM = R"=====(
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Roller shutter</title>
+    <title>Stairs driver</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
 </head>
@@ -38,7 +38,25 @@ const char page_config[] PROGMEM = R"=====(
     <hr class="hr">
     <form action="/save" method="POST">
         Wifi name: <input class="input" type="text" name="wifiname" value="{wifiname}"><br>
-        Wifi pass: <input class="input" type="password" name="wifipassword" value="{wifipass}"><br>
+        Wifi pass: <input class="input" type="password" name="wifipassword" value="{wifipass}">
+        <br><br>
+        1 stair channel: <input class="input" type="number" name="channel1" value="{channel1}" min="0" max="15"><br>
+        2 stair channel: <input class="input" type="number" name="channel2" value="{channel2}" min="0" max="15"><br>
+        3 stair channel: <input class="input" type="number" name="channel3" value="{channel3}" min="0" max="15"><br>
+        4 stair channel: <input class="input" type="number" name="channel4" value="{channel4}" min="0" max="15"><br>
+        5 stair channel: <input class="input" type="number" name="channel5" value="{channel5}" min="0" max="15"><br>
+        6 stair channel: <input class="input" type="number" name="channel6" value="{channel6}" min="0" max="15"><br>
+        7 stair channel: <input class="input" type="number" name="channel7" value="{channel7}" min="0" max="15"><br>
+        8 stair channel: <input class="input" type="number" name="channel8" value="{channel8}" min="0" max="15"><br>
+        9 stair channel: <input class="input" type="number" name="channel9" value="{channel9}" min="0" max="15"><br>
+        10 stair channel: <input class="input" type="number" name="channel10" value="{channel10}" min="0" max="15"><br>
+        11 stair channel: <input class="input" type="number" name="channel11" value="{channel11}" min="0" max="15"><br>
+        12 stair channel: <input class="input" type="number" name="channel12" value="{channel12}" min="0" max="15"><br>
+        13 stair channel: <input class="input" type="number" name="channel13" value="{channel13}" min="0" max="15"><br>
+        14 stair channel: <input class="input" type="number" name="channel14" value="{channel14}" min="0" max="15"><br>
+        15 stair channel: <input class="input" type="number" name="channel15" value="{channel15}" min="0" max="15"><br>
+        16 stair channel: <input class="input" type="number" name="channel16" value="{channel16}" min="0" max="15"><br>
+        <br><br>
         TimeForLedsSwitchedOn: <input class="input" type="number" name="TimeForLedsSwitchedOn" value="{TimeForLedsSwitchedOn}"><br>
         DelayForNextStairToSwitchOn: <input class="input" type="number" name="DelayForNextStairToSwitchOn" value="{DelayForNextStairToSwitchOn}"><br>
         MillisCountForFullBrightness: <input class="input" type="number" name="MillisCountForFullBrightness" value="{MillisCountForFullBrightness}"><br>
