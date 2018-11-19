@@ -7,6 +7,24 @@ void StairsLedDriver::Begin(Logger &logger, ConfigManager &configManager)
 	this->delayForNextStairToSwitchOn = configManager.DelayForNextStairToSwitchOn;
 	this->millisCountForFullBrightness = configManager.MillisCountForFullBrightness;
 	this->stairsCount = configManager.StairsCount;
+
+	this->stairsMap[0] = configManager.Channel1;
+	this->stairsMap[1] = configManager.Channel2;
+	this->stairsMap[2] = configManager.Channel3;
+	this->stairsMap[3] = configManager.Channel4;
+	this->stairsMap[4] = configManager.Channel5;
+	this->stairsMap[5] = configManager.Channel6;
+	this->stairsMap[6] = configManager.Channel7;
+	this->stairsMap[7] = configManager.Channel8;
+	this->stairsMap[8] = configManager.Channel9;
+	this->stairsMap[9] = configManager.Channel10;
+	this->stairsMap[10] = configManager.Channel11;
+	this->stairsMap[11] = configManager.Channel12;
+	this->stairsMap[12] = configManager.Channel13;
+	this->stairsMap[13] = configManager.Channel14;
+	this->stairsMap[14] = configManager.Channel15;
+	this->stairsMap[15] = configManager.Channel16;
+
 	this->logger.Log("Stairs count: ");
 	this->logger.LogLine(this->stairsCount);
 	pwm.begin();
@@ -37,8 +55,8 @@ void StairsLedDriver::GoUp()
 
 		for (int i = 0; i < stairsCount; ++i)
 		{
-			if (!ledStrips[i]->IsFading() || !ledStrips[i]->IsBrightnessGoingUp())
-				ledStrips[i]->Fade(100, i * this->delayForNextStairToSwitchOn);
+			if (!ledStrips[stairsMap[i]]->IsFading() || !ledStrips[stairsMap[i]]->IsBrightnessGoingUp())
+				ledStrips[stairsMap[i]]->Fade(100, i * this->delayForNextStairToSwitchOn);
 		}
 	}
 
@@ -57,8 +75,8 @@ void StairsLedDriver::GoDown()
 		for (int i = 0; i < stairsCount; ++i)
 		{
 			int currentLedStrip = stairsCount - i - 1;
-			if (!ledStrips[currentLedStrip]->IsFading() || !ledStrips[currentLedStrip]->IsBrightnessGoingUp())
-				ledStrips[currentLedStrip]->Fade(100, i * this->delayForNextStairToSwitchOn);
+			if (!ledStrips[stairsMap[currentLedStrip]]->IsFading() || !ledStrips[stairsMap[currentLedStrip]]->IsBrightnessGoingUp())
+				ledStrips[stairsMap[currentLedStrip]]->Fade(100, i * this->delayForNextStairToSwitchOn);
 		}
 	}
 
@@ -69,7 +87,7 @@ void StairsLedDriver::Update()
 {
 	for (int i = 0; i < this->stairsCount; ++i)
 	{
-		ledStrips[i]->Update();
+		ledStrips[stairsMap[i]]->Update();
 	}
 
 	if (state > STAIRS_OFF)
@@ -80,7 +98,7 @@ void StairsLedDriver::Update()
 			{
 				for (int i = 0; i < stairsCount; ++i)
 				{
-					ledStrips[i]->Fade(0, i * this
+					ledStrips[stairsMap[i]]->Fade(0, i * this
 						->delayForNextStairToSwitchOn);
 				}
 			}
@@ -88,7 +106,7 @@ void StairsLedDriver::Update()
 			{
 				for (int i = 0; i < stairsCount; ++i)
 				{
-					ledStrips[stairsCount - i - 1]
+					ledStrips[stairsCount - stairsMap[i] - 1]
 						->Fade(0, i * this->delayForNextStairToSwitchOn);
 				}
 			}
@@ -98,10 +116,10 @@ void StairsLedDriver::Update()
 
 				for (int i = middleStair; i >= 0; --i)
 				{
-					ledStrips[i]
+					ledStrips[stairsMap[i]]
 						->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
 
-					ledStrips[stairsCount - i - 1]
+					ledStrips[stairsCount - stairsMap[i] - 1]
 						->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
 				}
 			}
