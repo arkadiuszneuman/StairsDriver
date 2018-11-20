@@ -60,8 +60,6 @@ bool ConfigManager::SaveConfig()
 
 	configFile.close();
 
-	ESP.restart();
-
 	return true;
 }
 

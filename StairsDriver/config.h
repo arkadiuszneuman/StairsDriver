@@ -73,6 +73,10 @@ const char page_config[] PROGMEM = R"=====(
     <form class="reset-settings" action="/resetsettings" method="POST">
         <input type="submit" value="Reset settings">
     </form>
+
+	<form class="reset-settings" action="/restart" method="POST">
+        <input type="submit" value="Restart">
+    </form>
 </body>
 </html>
 )=====";

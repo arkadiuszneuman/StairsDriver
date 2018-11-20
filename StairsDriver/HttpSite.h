@@ -24,13 +24,11 @@ private:
 	void Config();
 	void ConfigPost();
 	void ResetSettings();
-	void ChangeLevel();
-	void GetLogs();
+	void Restart();
 public:
 	void Init(ConfigManager &configManager, Logger &logger);
 	void Update();
 	void SetStatus(String status);
-	void SendInformationAboutLevel(int level);
 };
 
 #endif

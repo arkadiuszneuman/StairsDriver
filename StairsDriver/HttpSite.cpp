@@ -12,6 +12,7 @@ void HttpSite::Init(ConfigManager &configManager, Logger &logger)
 	server->on("/config", std::bind(&HttpSite::Config, this));
 	server->on("/save", HTTPMethod::HTTP_POST, std::bind(&HttpSite::ConfigPost, this));
 	server->on("/resetsettings", HTTPMethod::HTTP_POST, std::bind(&HttpSite::ResetSettings, this));
+	server->on("/restart", HTTPMethod::HTTP_POST, std::bind(&HttpSite::Restart, this));
 
 	server->begin();
 	logger.LogLine("HTTP server started");
@@ -175,4 +176,11 @@ void HttpSite::ResetSettings()
 	configManager.SaveConfig();
 
 	Config();
+}
+
+void HttpSite::Restart()
+{
+	logger.LogLine("post to /restart");
+
+	ESP.restart();
 }
