@@ -15,7 +15,7 @@ void ConfigManager::Init(Logger &logger)
 
 bool ConfigManager::SaveConfig()
 {
-	StaticJsonBuffer<200> jsonBuffer;
+	StaticJsonBuffer<800> jsonBuffer;
 	JsonObject& json = jsonBuffer.createObject();
 
 	json["wifiname"] = WifiName;
@@ -100,7 +100,7 @@ bool ConfigManager::LoadConfig()
 	// use configFile.readString instead.
 	configFile.readBytes(buf.get(), size);
 
-	StaticJsonBuffer<200> jsonBuffer;
+	StaticJsonBuffer<800> jsonBuffer;
 	JsonObject& json = jsonBuffer.parseObject(buf.get());
 
 	if (!json.success())
