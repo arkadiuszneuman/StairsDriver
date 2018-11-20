@@ -65,7 +65,7 @@ void WifiConnector::CreateSoftAP()
 {
 	logger.LogLine("Creating soft AP");
 
-	bool result = WiFi.softAP("ESP_StairsDriver", "wsadqe");
+	bool result = WiFi.softAP("ESP_StairsDriver", "wsadqe12345");
 	if (result)
 		logger.LogLine("AP Ready");
 	else
