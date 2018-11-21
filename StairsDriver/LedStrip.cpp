@@ -87,3 +87,8 @@ bool LedStrip::IsFading()
 {
 	return this->isFading;
 }
+
+bool LedStrip::IsFadePlanned()
+{
+	return this->isFadingPlanned;
+}

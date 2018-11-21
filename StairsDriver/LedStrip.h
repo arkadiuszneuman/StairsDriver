@@ -35,6 +35,7 @@ public:
 	void Fade(int brightnessPercent, int delay = 0);
 	void Update();
 	bool IsFading();
+	bool IsFadePlanned();
 	bool IsBrightnessGoingUp();
 };
 

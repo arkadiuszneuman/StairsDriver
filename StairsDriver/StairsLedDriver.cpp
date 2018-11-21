@@ -94,20 +94,28 @@ void StairsLedDriver::Update()
 	{
 		if (millis() - this->timeOfLastSensorDetected > this->timeForLedsSwitchedOn)
 		{
+			bool allStairsAreOff = true;
+
 			if (state == STAIRS_GO_UP)
 			{
 				for (int i = 0; i < stairsCount; ++i)
 				{
-					ledStrips[stairsMap[i]]->Fade(0, i * this
-						->delayForNextStairToSwitchOn);
+					if (ledStrips[stairsMap[i]]->IsFadePlanned())
+						allStairsAreOff = false;
+					else
+						ledStrips[stairsMap[i]]->Fade(0, i * this
+							->delayForNextStairToSwitchOn);
 				}
 			}
 			else if (state == STAIRS_GO_DOWN)
 			{
 				for (int i = 0; i < stairsCount; ++i)
 				{
-					ledStrips[stairsCount - stairsMap[i] - 1]
-						->Fade(0, i * this->delayForNextStairToSwitchOn);
+					if (ledStrips[stairsCount - stairsMap[i] - 1]->IsFadePlanned())
+						allStairsAreOff = false;
+					else
+						ledStrips[stairsCount - stairsMap[i] - 1]
+							->Fade(0, i * this->delayForNextStairToSwitchOn);
 				}
 			}
 			else if (state == STAIRS_GO_UP_AND_DOWN)
@@ -116,15 +124,22 @@ void StairsLedDriver::Update()
 
 				for (int i = middleStair; i >= 0; --i)
 				{
-					ledStrips[stairsMap[i]]
-						->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
+					if (ledStrips[stairsMap[i]]->IsFadePlanned())
+						allStairsAreOff = false;
+					else
+						ledStrips[stairsMap[i]]
+							->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
 
-					ledStrips[stairsCount - stairsMap[i] - 1]
-						->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
+					if (ledStrips[stairsCount - stairsMap[i] - 1]->IsFadePlanned())
+						allStairsAreOff = false;
+					else
+						ledStrips[stairsCount - stairsMap[i] - 1]
+							->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
 				}
 			}
 
-			this->state = STAIRS_OFF;
+			if (allStairsAreOff)
+				this->state = STAIRS_OFF;
 		}
 	}
 }

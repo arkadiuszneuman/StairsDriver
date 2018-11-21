@@ -6,8 +6,8 @@
 #include "HttpSite.h"
 
 StairsLedDriver stairsLedDriver;
-InfraredDistanceRangingSensor bottomStairsSensor(14); //D5
-InfraredDistanceRangingSensor upperStairsSensor(12); //D6
+InfraredDistanceRangingSensor bottomStairsSensor(12); //D6
+InfraredDistanceRangingSensor upperStairsSensor(14); //D5
 Logger logger;
 OtaDriver otaDriver;
 ConfigManager configManager;
