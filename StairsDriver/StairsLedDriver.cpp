@@ -34,6 +34,8 @@ void StairsLedDriver::Begin(Logger &logger, ConfigManager &configManager)
 	for (int i = 0; i < this->stairsCount; i++)
 		this->ledStrips[i] = new LedStrip(logger, pwm, i, this->millisCountForFullBrightness);
 
+	this->logger.LogLine("Outputs initialized");
+
 	//switch off all leds
 	for (int i = 0; i < 16; i++)
 	{

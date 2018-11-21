@@ -100,6 +100,7 @@ bool ConfigManager::LoadConfig()
 
 	StaticJsonBuffer<800> jsonBuffer;
 	JsonObject& json = jsonBuffer.parseObject(buf.get());
+	json.prettyPrintTo(Serial);
 
 	if (!json.success())
 	{
