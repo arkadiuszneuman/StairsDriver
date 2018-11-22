@@ -33,7 +33,6 @@ private:
 	int delayForNextStairToSwitchOn = 2000;
 	int millisCountForFullBrightness = 10000;
 	int state = STAIRS_OFF;
-	int stairsMap[15];
 public:
 	void Begin(Logger &logger, ConfigManager &configManager);
 	void Update();
