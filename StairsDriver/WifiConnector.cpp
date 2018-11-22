@@ -4,60 +4,64 @@
 void WifiConnector::Init(Logger &logger)
 {
 	this->logger = logger;
+	WiFi.setAutoConnect(false);
 }
 
 void WifiConnector::ConnectToWifi(ConfigManager &configManager)
 {
-	if (configManager.WifiName == "" || !configManager.WifiName)
+	if (!WiFi.isConnected())
 	{
-		CreateSoftAP();
-		return;
-	}
-	
-	const char* wifiname = configManager.WifiName.c_str();
-	const char* wifipass = configManager.WifiPass.c_str();
-
-	WiFi.begin(wifiname, wifipass); //Connect to your WiFi router
-
-	logger.LogLine();
-
-	int connectionSeconds = 0;
-	bool isConnected = false;
-
-	while (true)
-	{
-		if (WiFi.status() != WL_CONNECTED)
+		if (configManager.WifiName == "" || !configManager.WifiName)
 		{
-			delay(1000);
-			logger.Log(".");
+			CreateSoftAP();
+			return;
+		}
 
-			++connectionSeconds;
-			if (connectionSeconds >= maxConnectionSeconds)
+		const char* wifiname = configManager.WifiName.c_str();
+		const char* wifipass = configManager.WifiPass.c_str();
+
+		WiFi.begin(wifiname, wifipass); //Connect to your WiFi router
+
+		logger.LogLine();
+
+		int connectionSeconds = 0;
+		bool isConnected = false;
+
+		while (true)
+		{
+			if (WiFi.status() != WL_CONNECTED)
+			{
+				delay(1000);
+				logger.Log(".");
+
+				++connectionSeconds;
+				if (connectionSeconds >= maxConnectionSeconds)
+					break;
+			}
+			else
+			{
+				isConnected = true;
 				break;
+			}
 		}
-		else 
+
+		if (isConnected)
 		{
-			isConnected = true;
-			break;
+			//If connection successful show IP address in serial monitor
+			logger.LogLine("");
+			logger.Log("Connected to ");
+			logger.LogLine(configManager.WifiName);
+			logger.Log("IP address: ");
+			logger.LogLine(WiFi.localIP().toString());  //IP address assigned to your ESP
 		}
-	}
+		else
+		{
+			logger.LogLine("");
+			logger.Log("Cannot connect to ");
+			logger.LogLine(configManager.WifiName);
 
-	if (isConnected) 
-	{
-		//If connection successful show IP address in serial monitor
-		logger.LogLine("");
-		logger.Log("Connected to ");
-		logger.LogLine(configManager.WifiName);
-		logger.Log("IP address: ");
-		logger.LogLine(WiFi.localIP().toString());  //IP address assigned to your ESP
-	}
-	else 
-	{
-		logger.LogLine("");
-		logger.Log("Cannot connect to ");
-		logger.LogLine(configManager.WifiName);
-
-		CreateSoftAP();
+			CreateSoftAP();
+		}
 	}
 }
 
