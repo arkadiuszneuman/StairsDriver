@@ -92,3 +92,8 @@ bool LedStrip::IsFadePlanned()
 {
 	return this->isFadingPlanned;
 }
+
+double LedStrip::GetCurrentBrightness()
+{
+	return this->currentBrightness;
+}

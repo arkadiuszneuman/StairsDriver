@@ -37,6 +37,7 @@ public:
 	bool IsFading();
 	bool IsFadePlanned();
 	bool IsBrightnessGoingUp();
+	double GetCurrentBrightness();
 };
 
 #endif

@@ -127,14 +127,24 @@ void StairsLedDriver::Update()
 					if (ledStrips[i]->IsFadePlanned())
 						allStairsAreOff = false;
 					else
-						ledStrips[stairsMap[i]]
-							->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
+					{
+						if (ledStrips[i]->GetCurrentBrightness() > 0)
+						{
+							ledStrips[i]
+								->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
+						}
+					}
 
-					if (ledStrips[stairsCount - stairsMap[i] - 1]->IsFadePlanned())
+					if (ledStrips[stairsCount - i - 1]->IsFadePlanned())
 						allStairsAreOff = false;
 					else
-						ledStrips[stairsCount - stairsMap[i] - 1]
-							->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
+					{
+						if (ledStrips[stairsCount - i - 1]->GetCurrentBrightness() > 0)
+						{
+							ledStrips[stairsCount - i - 1]
+								->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
+						}
+					}
 				}
 			}
 
