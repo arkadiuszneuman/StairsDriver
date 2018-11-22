@@ -41,9 +41,6 @@ void StairsLedDriver::Begin(Logger &logger, ConfigManager &configManager)
 	{
 		pwm.setPWM(i, 0, 4096);
 	}
-
-	this->GoUp();
-	this->GoDown();
 }
 
 void StairsLedDriver::GoUp()
