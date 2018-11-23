@@ -1,3 +1,4 @@
+#include "SettingsContainer.h"
 #include "StairsLedDriver.h"
 #include "Logger.h"
 #include "OtaDriver.h"
@@ -14,6 +15,8 @@ ConfigManager configManager;
 WifiConnector wifiConnector;
 HttpSite httpSite;
 
+bool isOff = false;
+
 void setup() {
 	logger.Init();
 
@@ -22,7 +25,7 @@ void setup() {
 
 	wifiConnector.Init(logger);
 	wifiConnector.ConnectToWifi(configManager);
-	httpSite.Init(configManager, logger);
+	httpSite.Init(configManager, logger, onReceiveSettings);
 
 	otaDriver.Init(logger);
 	stairsLedDriver.Begin(logger, configManager);
@@ -30,18 +33,36 @@ void setup() {
 
 void loop() {
 	httpSite.Update();
-	stairsLedDriver.Update();
 	otaDriver.Update();
 
-	if (bottomStairsSensor.IsCollisionDetected())
+	if (!isOff)
 	{
-		logger.LogLine("Bottom stairs collision detected");
-		stairsLedDriver.GoUp();
-	}
+		stairsLedDriver.Update();
 
-	if (upperStairsSensor.IsCollisionDetected())
+		if (bottomStairsSensor.IsCollisionDetected())
+		{
+			logger.LogLine("Bottom stairs collision detected");
+			stairsLedDriver.GoUp();
+		}
+
+		if (upperStairsSensor.IsCollisionDetected())
+		{
+			logger.LogLine("Upper stairs collision detected");
+			stairsLedDriver.GoDown();
+		}
+	}
+}
+
+void onReceiveSettings(SettingsContainer receivedSettings) {
+	isOff = receivedSettings.GetStatus() == "off";
+	if (isOff)
+		stairsLedDriver.InstantlyOffAllLeds();
+	else
 	{
-		logger.LogLine("Upper stairs collision detected");
-		stairsLedDriver.GoDown();
+		if (receivedSettings.GetMaxLevel() >= 0)
+			stairsLedDriver.SetMaxLevel(receivedSettings.GetMaxLevel());
+
+		if (receivedSettings.GetMinLevel() >= 0)
+			stairsLedDriver.SetMinLevel(receivedSettings.GetMinLevel());
 	}
 }

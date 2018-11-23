@@ -5,6 +5,7 @@
 
 #include <ESP8266WebServer.h>
 #include "ConfigManager.h"
+#include "SettingsContainer.h"
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "arduino.h"
@@ -19,14 +20,15 @@ private:
 	ConfigManager configManager;
 	Logger logger;
 	String status = "Idle";
-	void(*receivedLevelFunc)(int);
+	void(*receivedSettingsFunc)(SettingsContainer);
 	void Index();
 	void Config();
 	void ConfigPost();
+	void ChangeSettings();
 	void ResetSettings();
 	void Restart();
 public:
-	void Init(ConfigManager &configManager, Logger &logger);
+	void Init(ConfigManager &configManager, Logger &logger, void(*receivedSettingsFunc)(SettingsContainer));
 	void Update();
 	void SetStatus(String status);
 };

@@ -24,12 +24,15 @@ private:
 	int channel;
 	int currentBrightness = 0;
 	int brightnessToSet = 0;
+	int minLevelPwm = 0;
 	bool brightnessGoingUp = true;
 	bool isFadingPlanned = false;
 	bool isFading = false;
 	double previousTimeLeftPercent = 0;
 	long millisStart = 0;
 	void SetPWM(int pwmValue);
+	int minLevel = 0;
+	int maxLevel = 100;
 public:
 	LedStrip(Logger &logger, Adafruit_PWMServoDriver &pwm, int channel, int milisCountForFullBrightness);
 	void Fade(int brightnessPercent, int delay = 0);
@@ -38,6 +41,9 @@ public:
 	bool IsFadePlanned();
 	bool IsBrightnessGoingUp();
 	double GetCurrentBrightness();
+	void SetMinLevel(int minLevel);
+	void SetMaxLevel(int maxLevel);
+	int GetMinLevelPwm();
 };
 
 #endif

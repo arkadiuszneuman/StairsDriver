@@ -38,6 +38,9 @@ public:
 	void Update();
 	void GoUp();
 	void GoDown();
+	void InstantlyOffAllLeds();
+	void SetMinLevel(int minLevel);
+	void SetMaxLevel(int maxLevel);
 };
 
 #endif

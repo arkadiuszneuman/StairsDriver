@@ -37,16 +37,13 @@ void StairsLedDriver::Begin(Logger &logger, ConfigManager &configManager)
 
 	this->logger.LogLine("Outputs initialized");
 
-	//switch off all leds
-	for (int i = 0; i < 16; i++)
-	{
-		pwm.setPWM(i, 0, 4096);
-	}
+	InstantlyOffAllLeds();
 }
 
 void StairsLedDriver::GoUp()
 {
-	if (this->state == STAIRS_GO_DOWN || this->state == STAIRS_OFF)
+	if ((this->state == STAIRS_GO_DOWN || this->state == STAIRS_OFF)
+		&& ledStrips[stairsCount - 1]->GetCurrentBrightness() == ledStrips[stairsCount - 1]->GetMinLevelPwm())
 	{
 		if (this->state == STAIRS_GO_DOWN)
 			this->state = STAIRS_GO_UP_AND_DOWN;
@@ -55,7 +52,7 @@ void StairsLedDriver::GoUp()
 
 		for (int i = 0; i < stairsCount; ++i)
 		{
-			if (!ledStrips[i]->IsFading() || !ledStrips[i]->IsBrightnessGoingUp())
+			if (!ledStrips[i]->IsFadePlanned())
 				ledStrips[i]->Fade(100, i * this->delayForNextStairToSwitchOn);
 		}
 	}
@@ -65,7 +62,8 @@ void StairsLedDriver::GoUp()
 
 void StairsLedDriver::GoDown()
 {
-	if (this->state == STAIRS_GO_UP || this->state == STAIRS_OFF)
+	if ((this->state == STAIRS_GO_UP || this->state == STAIRS_OFF)
+		&& ledStrips[0]->GetCurrentBrightness() == ledStrips[0]->GetMinLevelPwm())
 	{
 		if (this->state == STAIRS_GO_UP)
 			this->state = STAIRS_GO_UP_AND_DOWN;
@@ -75,7 +73,7 @@ void StairsLedDriver::GoDown()
 		for (int i = 0; i < stairsCount; ++i)
 		{
 			int currentLedStrip = stairsCount - i - 1;
-			if (!ledStrips[currentLedStrip]->IsFading() || !ledStrips[currentLedStrip]->IsBrightnessGoingUp())
+			if (!ledStrips[currentLedStrip]->IsFadePlanned())
 				ledStrips[currentLedStrip]->Fade(100, i * this->delayForNextStairToSwitchOn);
 		}
 	}
@@ -128,7 +126,7 @@ void StairsLedDriver::Update()
 						allStairsAreOff = false;
 					else
 					{
-						if (ledStrips[i]->GetCurrentBrightness() > 0)
+						if (ledStrips[i]->GetCurrentBrightness() > ledStrips[i]->GetMinLevelPwm())
 						{
 							ledStrips[i]
 								->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
@@ -139,7 +137,7 @@ void StairsLedDriver::Update()
 						allStairsAreOff = false;
 					else
 					{
-						if (ledStrips[stairsCount - i - 1]->GetCurrentBrightness() > 0)
+						if (ledStrips[stairsCount - i - 1]->GetCurrentBrightness() > ledStrips[stairsCount - i - 1]->GetCurrentBrightness())
 						{
 							ledStrips[stairsCount - i - 1]
 								->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
@@ -152,4 +150,24 @@ void StairsLedDriver::Update()
 				this->state = STAIRS_OFF;
 		}
 	}
+}
+
+void StairsLedDriver::InstantlyOffAllLeds()
+{
+	for (int i = 0; i < 16; i++)
+	{
+		pwm.setPWM(i, 0, 4096);
+	}
+}
+
+void StairsLedDriver::SetMinLevel(int minLevel)
+{
+	for (int i = 0; i < this->stairsCount; i++)
+		this->ledStrips[i]->SetMinLevel(minLevel);
+}
+
+void StairsLedDriver::SetMaxLevel(int maxLevel)
+{
+	for (int i = 0; i < this->stairsCount; i++)
+		this->ledStrips[i]->SetMaxLevel(maxLevel);
 }

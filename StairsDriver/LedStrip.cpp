@@ -11,7 +11,13 @@ LedStrip::LedStrip(Logger &logger, Adafruit_PWMServoDriver &pwm, int channel, in
 
 void LedStrip::Fade(int brightnessPercent, int delay)
 {
+	if (brightnessPercent > this->maxLevel)
+		brightnessPercent = this->maxLevel;
+	if (brightnessPercent < this->minLevel)
+		brightnessPercent = this->minLevel;
+
 	this->brightnessToSet = brightnessPercent * 1.0 * MAX_LED_BRIGHTNESS / 100;
+
 	this->brightnessGoingUp = this->brightnessToSet > this->currentBrightness;
 	this->millisStart = millis() + delay;
 	this->isFadingPlanned = true;
@@ -21,6 +27,8 @@ void LedStrip::Fade(int brightnessPercent, int delay)
 	logger.LogLine(brightnessPercent);
 	logger.Log("Setting brightness ");
 	logger.LogLine(brightnessToSet);
+	logger.Log("Current brightness ");
+	logger.LogLine(currentBrightness);
 	logger.Log("GoingUp ");
 	logger.LogLine(brightnessGoingUp);
 }
@@ -96,4 +104,20 @@ bool LedStrip::IsFadePlanned()
 double LedStrip::GetCurrentBrightness()
 {
 	return this->currentBrightness;
+}
+
+void LedStrip::SetMinLevel(int minLevel)
+{
+	this->minLevel = minLevel;
+	Fade(this->minLevel);
+}
+
+void LedStrip::SetMaxLevel(int maxLevel)
+{
+	this->maxLevel = maxLevel;
+}
+
+int LedStrip::GetMinLevelPwm()
+{
+	return this->minLevel * 1.0 * MAX_LED_BRIGHTNESS / 100;
 }

@@ -16,6 +16,7 @@ class Logger
 private:
 	//String* logHistory;
 	int logLine = 0;
+	bool showMillis = true;
 
 public:
 	void Init();

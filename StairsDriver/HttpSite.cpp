@@ -2,14 +2,17 @@
 #include "index.h"
 #include "config.h"
 
-void HttpSite::Init(ConfigManager &configManager, Logger &logger)
+void HttpSite::Init(ConfigManager &configManager, Logger &logger,
+	void(*receivedSettingsFunc)(SettingsContainer))
 {
 	server = new ESP8266WebServer(80);
 	this->configManager = configManager;
 	this->logger = logger;
+	this->receivedSettingsFunc = receivedSettingsFunc;
 
 	server->on("/", std::bind(&HttpSite::Index, this));
 	server->on("/config", std::bind(&HttpSite::Config, this));
+	server->on("/changesettings", std::bind(&HttpSite::ChangeSettings, this));
 	server->on("/save", HTTPMethod::HTTP_POST, std::bind(&HttpSite::ConfigPost, this));
 	server->on("/resetsettings", HTTPMethod::HTTP_POST, std::bind(&HttpSite::ResetSettings, this));
 	server->on("/restart", HTTPMethod::HTTP_POST, std::bind(&HttpSite::Restart, this));
@@ -183,4 +186,25 @@ void HttpSite::Restart()
 	logger.LogLine("post to /restart");
 
 	ESP.restart();
+}
+
+void HttpSite::ChangeSettings()
+{
+	logger.LogLine("get from /changesettings");
+
+	String status = server->arg("status");
+	String minLevel = server->arg("minlevel");
+	String maxLevel = server->arg("maxlevel");
+	int minLevelInt = -1;
+	int maxLevelInt = -1;
+
+	if (minLevel != "")
+		minLevelInt = atoi(minLevel.c_str());
+
+	if (maxLevel != "")
+		maxLevelInt = atoi(maxLevel.c_str());
+
+	receivedSettingsFunc(SettingsContainer(status, minLevelInt, maxLevelInt));
+
+	server->send(200, "text/html", "{ \"status\": \"Got settings\" }");
 }

@@ -7,6 +7,12 @@ void Logger::Init()
 
 void Logger::Log(String text)
 {
+	if (showMillis)
+	{
+		Serial.print(millis());
+		Serial.print(": ");
+		showMillis = false;
+	}
 	Serial.print(text);
 }
 
@@ -19,7 +25,14 @@ void Logger::Log(int text)
 
 void Logger::LogLine(String text)
 {
+	if (showMillis)
+	{
+		Serial.print(millis());
+		Serial.print(": ");
+	}
 	Serial.println(text);
+
+	showMillis = true;
 }
 
 void Logger::LogLine(int text)

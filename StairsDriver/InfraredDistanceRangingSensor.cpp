@@ -8,5 +8,19 @@ InfraredDistanceRangingSensor::InfraredDistanceRangingSensor(int pin)
 
 bool InfraredDistanceRangingSensor::IsCollisionDetected()
 {
-	return digitalRead(this->pin) == LOW;
+	int read = digitalRead(this->pin);
+	if (read == LOW)
+	{
+		++readCount;
+		if (readCount == SENSOR_VALID_READ_COUNT)
+		{
+			readCount = 0;
+			return true;
+		}
+
+		return false;
+	}
+	
+	readCount = 0;
+	return false;
 }
