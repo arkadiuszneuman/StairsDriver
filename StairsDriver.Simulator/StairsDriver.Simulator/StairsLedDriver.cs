@@ -10,7 +10,7 @@ namespace StairsDriver.Simulator
         int delayForNextStairToSwitchOn;
         int millisCountForFullBrightness;
         int stairsCount;
-        private LedStrip[] ledStrips;
+        public LedStrip[] ledStrips;
         private MillisMock millisMock;
         int state;
         int STAIRS_OFF = 0, STAIRS_GO_UP = 1, STAIRS_GO_DOWN = 2, STAIRS_GO_UP_AND_DOWN = 3;
@@ -104,7 +104,7 @@ namespace StairsDriver.Simulator
 
             if (state > STAIRS_OFF)
             {
-                if (millis() - this.timeOfLastSensorDetected > this.timeForLedsSwitchedOn)
+                if (millis() - this.timeOfLastSensorDetected >= this.timeForLedsSwitchedOn)
                 {
                     bool allStairsAreOff = true;
 

@@ -7,8 +7,8 @@
         bool isFadingPlanned;
         bool brightnessGoingUp;
         long millisStart;
-        int minLevel;
-        int maxLevel;
+        int minLevel = 0;
+        int maxLevel = 100;
         int brightnessToSet;
         int MAX_LED_BRIGHTNESS = 4096;
         int currentBrightness;
@@ -28,7 +28,7 @@
 
         public void Fade(int brightnessPercent, int delay)
         {
-            long currentMillisStart = millis();
+            long currentMillisStart = millis() + delay;
 
             if (this.isFadingPlanned && !this.brightnessGoingUp)
             {
