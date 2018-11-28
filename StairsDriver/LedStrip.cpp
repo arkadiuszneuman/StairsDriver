@@ -11,6 +11,14 @@ LedStrip::LedStrip(Logger &logger, Adafruit_PWMServoDriver &pwm, int channel, in
 
 void LedStrip::Fade(int brightnessPercent, int delay)
 {
+	unsigned long currentMillisStart = millis();
+
+	if (this->isFadingPlanned && !this->brightnessGoingUp)
+	{
+		if (this->millisStart < currentMillisStart)
+			return;
+	}
+
 	if (brightnessPercent > this->maxLevel)
 		brightnessPercent = this->maxLevel;
 	if (brightnessPercent < this->minLevel)
@@ -19,7 +27,7 @@ void LedStrip::Fade(int brightnessPercent, int delay)
 	this->brightnessToSet = brightnessPercent * 1.0 * MAX_LED_BRIGHTNESS / 100;
 
 	this->brightnessGoingUp = this->brightnessToSet > this->currentBrightness;
-	this->millisStart = millis() + delay;
+	this->millisStart = currentMillisStart;
 	this->isFadingPlanned = true;
 	this->previousTimeLeftPercent = 0;
 
@@ -33,8 +41,25 @@ void LedStrip::Fade(int brightnessPercent, int delay)
 	logger.LogLine(brightnessGoingUp);
 }
 
+void LedStrip::AddFadePlan(int brightnessPercent, int delay)
+{
+	//if (this->fadePlan)
+	//	delete this->fadePlan;
+	//this->fadePlan = new FadeInfo(brightnessPercent, millis() + delay);
+}
+
 void LedStrip::Update()
 {
+	/*if (!this->isFading && this->fadePlan)
+	{
+		int delay = this->fadePlan->GetStartOnMillis() - millis();
+		if (delay >= 0)
+			Fade(this->fadePlan->GetBrightnessPercent(), delay);
+
+		delete this->fadePlan;
+		this->fadePlan = NULL;
+	}*/
+
 	if (!this->isFadingPlanned)
 		return;
 
@@ -120,4 +145,19 @@ void LedStrip::SetMaxLevel(int maxLevel)
 int LedStrip::GetMinLevelPwm()
 {
 	return this->minLevel * 1.0 * MAX_LED_BRIGHTNESS / 100;
+}
+
+int LedStrip::GetMaxLevelPwm()
+{
+	return this->maxLevel * 1.0 * MAX_LED_BRIGHTNESS / 100;
+}
+
+bool LedStrip::IsFadedToMinLevel()
+{
+	return GetCurrentBrightness() == GetMinLevelPwm();
+}
+
+bool LedStrip::IsFadedToMaxLevel()
+{
+	return GetCurrentBrightness() == GetMaxLevelPwm();
 }

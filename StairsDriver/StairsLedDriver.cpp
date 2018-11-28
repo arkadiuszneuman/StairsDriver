@@ -42,18 +42,27 @@ void StairsLedDriver::Begin(Logger &logger, ConfigManager &configManager)
 
 void StairsLedDriver::GoUp()
 {
-	if ((this->state == STAIRS_GO_DOWN || this->state == STAIRS_OFF)
-		&& ledStrips[stairsCount - 1]->GetCurrentBrightness() == ledStrips[stairsCount - 1]->GetMinLevelPwm())
+	if ((this->state == STAIRS_GO_DOWN || this->state == STAIRS_OFF || ledStrips[0]->IsFadedToMinLevel() || !ledStrips[0]->IsBrightnessGoingUp())
+		)
 	{
-		if (this->state == STAIRS_GO_DOWN)
-			this->state = STAIRS_GO_UP_AND_DOWN;
-		else
-			this->state = STAIRS_GO_UP;
+		bool isAnyFaded = false;
 
 		for (int i = 0; i < stairsCount; ++i)
 		{
-			if (!ledStrips[i]->IsFadePlanned())
+		/*	if ((!ledStrips[i]->IsFading() && !ledStrips[i]->IsFadedToMaxLevel()) 
+				)*/
+			{
 				ledStrips[i]->Fade(100, i * this->delayForNextStairToSwitchOn);
+				isAnyFaded = true;
+			}
+		}
+
+		if (isAnyFaded)
+		{
+			if (this->state == STAIRS_GO_DOWN)
+				this->state = STAIRS_GO_UP_AND_DOWN;
+			else
+				this->state = STAIRS_GO_UP;
 		}
 	}
 
@@ -62,19 +71,28 @@ void StairsLedDriver::GoUp()
 
 void StairsLedDriver::GoDown()
 {
-	if ((this->state == STAIRS_GO_UP || this->state == STAIRS_OFF)
-		&& ledStrips[0]->GetCurrentBrightness() == ledStrips[0]->GetMinLevelPwm())
+	if ((this->state == STAIRS_GO_UP || this->state == STAIRS_OFF || ledStrips[stairsCount - 1]->IsFadedToMinLevel() || !ledStrips[stairsCount - 1]->IsBrightnessGoingUp())
+		)
 	{
-		if (this->state == STAIRS_GO_UP)
-			this->state = STAIRS_GO_UP_AND_DOWN;
-		else
-			this->state = STAIRS_GO_DOWN;
+		bool isAnyFaded = false;
 
 		for (int i = 0; i < stairsCount; ++i)
 		{
 			int currentLedStrip = stairsCount - i - 1;
-			if (!ledStrips[currentLedStrip]->IsFadePlanned())
+			/*if ((!ledStrips[currentLedStrip]->IsFading() && !ledStrips[currentLedStrip]->IsFadedToMaxLevel())
+				)*/
+			{
 				ledStrips[currentLedStrip]->Fade(100, i * this->delayForNextStairToSwitchOn);
+				isAnyFaded = true;
+			}
+		}
+
+		if (isAnyFaded)
+		{
+			if (this->state == STAIRS_GO_UP)
+				this->state = STAIRS_GO_UP_AND_DOWN;
+			else
+				this->state = STAIRS_GO_DOWN;
 		}
 	}
 
