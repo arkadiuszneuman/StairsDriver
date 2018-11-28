@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2019
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StairsDriver.Simulator", "StairsDriver.Simulator\StairsDriver.Simulator.csproj", "{3B1539C9-1373-4C1D-A6A7-712ECE5859B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StairsDriver.Tests", "StairsDriver.Tests\StairsDriver.Tests.csproj", "{C257966C-734E-41FF-A49F-5239AE8AC2BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B1539C9-1373-4C1D-A6A7-712ECE5859B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B1539C9-1373-4C1D-A6A7-712ECE5859B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B1539C9-1373-4C1D-A6A7-712ECE5859B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B1539C9-1373-4C1D-A6A7-712ECE5859B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C257966C-734E-41FF-A49F-5239AE8AC2BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C257966C-734E-41FF-A49F-5239AE8AC2BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C257966C-734E-41FF-A49F-5239AE8AC2BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C257966C-734E-41FF-A49F-5239AE8AC2BF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7746B327-7184-42B0-8C0D-3EC58556E8A8}
+	EndGlobalSection
+EndGlobal
