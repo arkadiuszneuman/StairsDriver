@@ -33,12 +33,6 @@ namespace StairsDriver.Simulator
         {
             long currentMillisStart = millis() + delay;
 
-            //if (this.isFadingPlanned && !this.brightnessGoingUp)
-            //{
-            //    if (this.millisStart < currentMillisStart)
-            //        return;
-            //}
-
             if (brightnessPercent > this.maxLevel)
                 brightnessPercent = this.maxLevel;
             if (brightnessPercent < this.minLevel)
@@ -67,8 +61,8 @@ namespace StairsDriver.Simulator
                 int delay = (int)(fadePlan.GetStartOnMillis() - millis());
                 if (delay <= 0)
                 {
-                    Fade(this.fadePlan.GetBrightnessPercent(), delay);
-                    //delete this.fadePlan;
+                    Fade(fadePlan.GetBrightnessPercent(), delay);
+                    //delete fadePlan;
                     fadePlan = null;
                 }
             }
@@ -134,7 +128,7 @@ namespace StairsDriver.Simulator
 
         public FadeInfo GetFadePlan()
         {
-            return this.fadePlan;
+            return fadePlan;
         }
 
         public double GetCurrentBrightness()

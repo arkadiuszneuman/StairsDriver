@@ -41,16 +41,11 @@
 
                 for (int i = 0; i < stairsCount; ++i)
                 {
-                    if (!ledStrips[i].IsBrightnessGoingUp())
+                    int delay = i * this.delayForNextStairToSwitchOn;
+                    if (ShouldFadeLed(ledStrips[i], delay))
                     {
-                        int delay = i * this.delayForNextStairToSwitchOn;
-                        FadeInfo fadePlan = ledStrips[i].GetFadePlan();
-                        if (fadePlan == null || fadePlan.GetStartOnMillis() > delay + millis())
-                        {
-                            ledStrips[i].AddFadePlan(100, delay);
-                            isAnyFaded = true;
-                        }
-
+                        ledStrips[i].AddFadePlan(100, delay);
+                        isAnyFaded = true;
                     }
                 }
 
@@ -77,15 +72,11 @@
                 {
                     int currentLedStrip = stairsCount - i - 1;
 
-                    if (!ledStrips[currentLedStrip].IsBrightnessGoingUp())
+                    int delay = i * this.delayForNextStairToSwitchOn;
+                    if (ShouldFadeLed(ledStrips[currentLedStrip], delay))
                     {
-                        int delay = i * this.delayForNextStairToSwitchOn;
-                        FadeInfo fadePlan = ledStrips[currentLedStrip].GetFadePlan();
-                        if (fadePlan == null || fadePlan.GetStartOnMillis() > delay + millis())
-                        {
-                            ledStrips[currentLedStrip].AddFadePlan(100, delay);
-                            isAnyFaded = true;
-                        }
+                        ledStrips[currentLedStrip].AddFadePlan(100, delay);
+                        isAnyFaded = true;
                     }
                 }
 
@@ -99,6 +90,17 @@
             }
 
             this.timeOfLastSensorDetected = millis();
+        }
+
+        public bool ShouldFadeLed(LedStrip ledStrip, int delay)
+        {
+            if (!ledStrip.IsBrightnessGoingUp() || !ledStrip.IsFadePlanned())
+            {
+                FadeInfo fadePlan = ledStrip.GetFadePlan();
+                return fadePlan == null || fadePlan.GetStartOnMillis() > delay + millis();
+            }
+
+            return false;
         }
 
         public void Update()
@@ -139,29 +141,33 @@
                     else if (state == STAIRS_GO_UP_AND_DOWN)
                     {
                         int middleStair = stairsCount / 2;
+                        bool isEven = stairsCount % 2 == 0;
+                        bool isFirstRun = true;
 
                         for (int i = middleStair; i >= 0; --i)
                         {
+                            int delay = (middleStair - i) * delayForNextStairToSwitchOn;
+                            if (isEven && !isFirstRun)
+                                delay -= delayForNextStairToSwitchOn;
+
                             if (ledStrips[i].IsFadePlanned())
                                 allStairsAreOff = false;
                             else
                             {
-                                if (ledStrips[i].GetCurrentBrightness() > ledStrips[i].GetMinLevelPwm())
+                                int currentLedStrip = stairsCount - i - 1;
+
+                                if (ShouldFadeLed(ledStrips[i], delay))
                                 {
-                                    ledStrips[i]
-                                        .Fade(0, (middleStair - i) * this.delayForNextStairToSwitchOn);
+                                    ledStrips[i].Fade(0, delay);
+                                    ledStrips[currentLedStrip]
+                                        .Fade(0, delay);
                                 }
                             }
 
-                            if (ledStrips[stairsCount - i - 1].IsFadePlanned())
-                                allStairsAreOff = false;
-                            else
+                            if (isEven && isFirstRun)
                             {
-                                if (ledStrips[stairsCount - i - 1].GetCurrentBrightness() > ledStrips[stairsCount - i - 1].GetCurrentBrightness())
-                                {
-                                    ledStrips[stairsCount - i - 1]
-                                        .Fade(0, (middleStair - i) * this.delayForNextStairToSwitchOn);
-                                }
+                                isFirstRun = false;
+                                --i;
                             }
                         }
                     }
