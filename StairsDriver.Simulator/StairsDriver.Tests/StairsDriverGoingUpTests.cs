@@ -5,7 +5,7 @@ using Xunit;
 
 namespace StairsDriver.Tests
 {
-    public class StairsDriverTests
+    public class StairsDriverGoingUpTests
     {
         private StairsLedDriver sut = new StairsLedDriver();
         private MillisMock millisMock = new MillisMock();

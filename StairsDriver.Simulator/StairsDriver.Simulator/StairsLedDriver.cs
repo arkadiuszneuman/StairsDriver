@@ -74,8 +74,8 @@ namespace StairsDriver.Simulator
                 for (int i = 0; i < stairsCount; ++i)
                 {
                     int currentLedStrip = stairsCount - i - 1;
-                    /*if ((!ledStrips[currentLedStrip].IsFading() && !ledStrips[currentLedStrip].IsFadedToMaxLevel())
-                        )*/
+
+                    if (!ledStrips[i].IsBrightnessGoingUp())
                     {
                         ledStrips[currentLedStrip].AddFadePlan(100, i * this.delayForNextStairToSwitchOn);
                         isAnyFaded = true;
