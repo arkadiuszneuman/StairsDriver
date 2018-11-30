@@ -45,10 +45,9 @@ namespace StairsDriver.Simulator
 
                 for (int i = 0; i < stairsCount; ++i)
                 {
-                    /*	if ((!ledStrips[i].IsFading() && !ledStrips[i].IsFadedToMaxLevel()) 
-                            )*/
+                    if (!ledStrips[i].IsBrightnessGoingUp())
                     {
-                        ledStrips[i].Fade(100, i * this.delayForNextStairToSwitchOn);
+                        ledStrips[i].AddFadePlan(100, i * this.delayForNextStairToSwitchOn);
                         isAnyFaded = true;
                     }
                 }
@@ -78,7 +77,7 @@ namespace StairsDriver.Simulator
                     /*if ((!ledStrips[currentLedStrip].IsFading() && !ledStrips[currentLedStrip].IsFadedToMaxLevel())
                         )*/
                     {
-                        ledStrips[currentLedStrip].Fade(100, i * this.delayForNextStairToSwitchOn);
+                        ledStrips[currentLedStrip].AddFadePlan(100, i * this.delayForNextStairToSwitchOn);
                         isAnyFaded = true;
                     }
                 }

@@ -1,4 +1,6 @@
-﻿namespace StairsDriver.Simulator
+﻿using System;
+
+namespace StairsDriver.Simulator
 {
     public class LedStrip
     {
@@ -14,6 +16,7 @@
         int currentBrightness;
         double previousTimeLeftPercent;
         bool isFading;
+        FadeInfo fadePlan;
 
         public LedStrip(MillisMock millisMock, int milisCountForFullBrightness)
         {
@@ -30,11 +33,11 @@
         {
             long currentMillisStart = millis() + delay;
 
-            if (this.isFadingPlanned && !this.brightnessGoingUp)
-            {
-                if (this.millisStart < currentMillisStart)
-                    return;
-            }
+            //if (this.isFadingPlanned && !this.brightnessGoingUp)
+            //{
+            //    if (this.millisStart < currentMillisStart)
+            //        return;
+            //}
 
             if (brightnessPercent > this.maxLevel)
                 brightnessPercent = this.maxLevel;
@@ -49,24 +52,25 @@
             this.previousTimeLeftPercent = 0;
         }
 
-        void AddFadePlan(int brightnessPercent, int delay)
+        public void AddFadePlan(int brightnessPercent, int delay)
         {
             //if (this.fadePlan)
             //	delete this.fadePlan;
-            //this.fadePlan = new FadeInfo(brightnessPercent, millis() + delay);
+            this.fadePlan = new FadeInfo(brightnessPercent, millis() + delay);
         }
 
         public void Update()
         {
-            /*if (!this.isFading && this.fadePlan)
+            if (fadePlan != null)
             {
-                int delay = this.fadePlan.GetStartOnMillis() - millis();
-                if (delay >= 0)
+                int delay = (int)(fadePlan.GetStartOnMillis() - millis());
+                if (delay <= 0)
+                {
                     Fade(this.fadePlan.GetBrightnessPercent(), delay);
-
-                delete this.fadePlan;
-                this.fadePlan = NULL;
-            }*/
+                    //delete this.fadePlan;
+                    fadePlan = null;
+                }
+            }
 
             if (!this.isFadingPlanned)
                 return;
@@ -79,12 +83,12 @@
 
                 double timeLeftPercent = difference * 1.0 * 100 / this.milisCountForFullBrightness;
 
-                if (timeLeftPercent - this.previousTimeLeftPercent >= 1)
+                if (timeLeftPercent - this.previousTimeLeftPercent > 0)
                 {
                     if (this.brightnessGoingUp)
-                        this.currentBrightness += (int)((timeLeftPercent - this.previousTimeLeftPercent) * MAX_LED_BRIGHTNESS / 100);
+                        this.currentBrightness += (int)Math.Round((timeLeftPercent - this.previousTimeLeftPercent) * MAX_LED_BRIGHTNESS / 100, 0);
                     else
-                        this.currentBrightness -= (int)((timeLeftPercent - this.previousTimeLeftPercent) * MAX_LED_BRIGHTNESS / 100);
+                        this.currentBrightness -= (int)Math.Round((timeLeftPercent - this.previousTimeLeftPercent) * MAX_LED_BRIGHTNESS / 100, 0);
 
                     this.previousTimeLeftPercent = timeLeftPercent;
 
