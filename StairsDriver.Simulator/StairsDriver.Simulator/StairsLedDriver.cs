@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace StairsDriver.Simulator
+﻿namespace StairsDriver.Simulator
 {
     public class StairsLedDriver
     {
@@ -47,8 +43,14 @@ namespace StairsDriver.Simulator
                 {
                     if (!ledStrips[i].IsBrightnessGoingUp())
                     {
-                        ledStrips[i].AddFadePlan(100, i * this.delayForNextStairToSwitchOn);
-                        isAnyFaded = true;
+                        int delay = i * this.delayForNextStairToSwitchOn;
+                        FadeInfo fadePlan = ledStrips[i].GetFadePlan();
+                        if (fadePlan == null || fadePlan.GetStartOnMillis() > delay + millis())
+                        {
+                            ledStrips[i].AddFadePlan(100, delay);
+                            isAnyFaded = true;
+                        }
+
                     }
                 }
 
@@ -75,10 +77,15 @@ namespace StairsDriver.Simulator
                 {
                     int currentLedStrip = stairsCount - i - 1;
 
-                    if (!ledStrips[i].IsBrightnessGoingUp())
+                    if (!ledStrips[currentLedStrip].IsBrightnessGoingUp())
                     {
-                        ledStrips[currentLedStrip].AddFadePlan(100, i * this.delayForNextStairToSwitchOn);
-                        isAnyFaded = true;
+                        int delay = i * this.delayForNextStairToSwitchOn;
+                        FadeInfo fadePlan = ledStrips[currentLedStrip].GetFadePlan();
+                        if (fadePlan == null || fadePlan.GetStartOnMillis() > delay + millis())
+                        {
+                            ledStrips[currentLedStrip].AddFadePlan(100, delay);
+                            isAnyFaded = true;
+                        }
                     }
                 }
 

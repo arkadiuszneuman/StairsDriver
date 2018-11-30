@@ -34,10 +34,6 @@ namespace StairsDriver.Tests
             sut.ledStrips[0].GetCurrentBrightness().Should().Be(4096);
             sut.ledStrips[1].GetCurrentBrightness().Should().Be(2048);
             sut.ledStrips[2].GetCurrentBrightness().Should().Be(0);
-            Update(1000);
-            sut.ledStrips[0].GetCurrentBrightness().Should().Be(4096);
-            sut.ledStrips[1].GetCurrentBrightness().Should().Be(2048);
-            sut.ledStrips[2].GetCurrentBrightness().Should().Be(0);
             Update(2000);
             sut.ledStrips[0].GetCurrentBrightness().Should().Be(4096);
             sut.ledStrips[1].GetCurrentBrightness().Should().Be(4096);

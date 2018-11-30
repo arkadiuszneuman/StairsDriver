@@ -57,6 +57,7 @@ namespace StairsDriver.Simulator
             //if (this.fadePlan)
             //	delete this.fadePlan;
             this.fadePlan = new FadeInfo(brightnessPercent, millis() + delay);
+            Update();
         }
 
         public void Update()
@@ -129,6 +130,11 @@ namespace StairsDriver.Simulator
         public bool IsFadePlanned()
         {
             return this.isFadingPlanned;
+        }
+
+        public FadeInfo GetFadePlan()
+        {
+            return this.fadePlan;
         }
 
         public double GetCurrentBrightness()
