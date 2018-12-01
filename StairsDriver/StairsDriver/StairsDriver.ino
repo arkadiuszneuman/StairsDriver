@@ -32,7 +32,6 @@ void setup() {
 }
 
 void loop() {
-	unsigned long starMillis = millis();
 	httpSite.Update();
 	otaDriver.Update();
 
@@ -44,19 +43,18 @@ void loop() {
 		{
 			logger.LogLine("Bottom stairs collision detected");
 			stairsLedDriver.GoUp();
+			httpSite.SendInfoAboutTriggeredSensorDown();
 		}
 
 		if (upperStairsSensor.IsCollisionDetected())
 		{
 			logger.LogLine("Upper stairs collision detected");
 			stairsLedDriver.GoDown();
+			httpSite.SendInfoAboutTriggeredSensorUp();
 		}
 	}
 
 	delay(10);
-	unsigned long loopTime = millis() - starMillis;
-	logger.Log("Loop time: ");
-	logger.LogLine(loopTime);
 }
 
 void onReceiveSettings(SettingsContainer receivedSettings) {

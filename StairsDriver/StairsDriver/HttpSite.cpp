@@ -208,3 +208,46 @@ void HttpSite::ChangeSettings()
 
 	server->send(200, "text/html", "{ \"status\": \"Got settings\" }");
 }
+
+void HttpSite::SendInfoAboutSensor(String url, String port, String uri)
+{
+	if (url != "" && port != "" && uri != "")
+	{
+		if (millis() - lastInfoAboutSensor > 5000)
+		{
+			logger.Log("sending info ");
+			logger.Log(url);
+			logger.Log(":");
+			logger.Log(port);
+			logger.LogLine(uri);
+
+			WiFiClient client;
+			client.setTimeout(2000);
+			if (!client.connect(url, atoi(port.c_str()))) {
+				logger.LogLine("connection failed");
+				return;
+			}
+
+			// This will send the request to the server
+			client.print(String("GET ") + uri + " HTTP/1.1\r\n" +
+				"Host: " + url + "\r\n" +
+				"Connection: close\r\n\r\n");
+
+			logger.LogLine("closing connection");
+
+			lastInfoAboutSensor = millis();
+		}
+	}
+}
+
+void HttpSite::SendInfoAboutTriggeredSensorDown()
+{
+	SendInfoAboutSensor(configManager.InfoUrlSensorDown,
+		configManager.PortSensorDown, configManager.UriSensorDown);
+}
+
+void HttpSite::SendInfoAboutTriggeredSensorUp()
+{
+	SendInfoAboutSensor(configManager.InfoUrlSensorUp,
+		configManager.PortSensorUp, configManager.UriSensorUp);
+}

@@ -20,6 +20,7 @@ private:
 	ConfigManager configManager;
 	Logger logger;
 	String status = "Idle";
+	unsigned long lastInfoAboutSensor = 0;
 	void(*receivedSettingsFunc)(SettingsContainer);
 	void Index();
 	void Config();
@@ -27,10 +28,13 @@ private:
 	void ChangeSettings();
 	void ResetSettings();
 	void Restart();
+	void SendInfoAboutSensor(String url, String port, String uri);
 public:
 	void Init(ConfigManager &configManager, Logger &logger, void(*receivedSettingsFunc)(SettingsContainer));
 	void Update();
 	void SetStatus(String status);
+	void SendInfoAboutTriggeredSensorDown();
+	void SendInfoAboutTriggeredSensorUp();
 };
 
 #endif
