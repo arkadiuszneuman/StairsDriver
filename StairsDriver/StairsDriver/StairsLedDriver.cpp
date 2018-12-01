@@ -100,9 +100,11 @@ void StairsLedDriver::GoDown()
 	this->timeOfLastSensorDetected = millis();
 }
 
-bool StairsLedDriver::ShouldFadeLed(LedStrip* ledStrip, int delay)
+bool StairsLedDriver::ShouldFadeLed(LedStrip* ledStrip, int delay, bool ignoreFullBrightness)
 {
-	if (!ledStrip->IsBrightnessGoingUp() || !ledStrip->IsFadePlanned())
+	if (!ledStrip->IsBrightnessGoingUp() ||
+		(!ledStrip->IsFadePlanned() &&
+			(ledStrip->GetCurrentBrightness() < ledStrip->GetMaxLevelPwm() || ignoreFullBrightness)))
 	{
 		FadeInfo* fadePlan = ledStrip->GetFadePlan();
 		return fadePlan == NULL || fadePlan->GetStartOnMillis() > delay + millis();
@@ -165,11 +167,10 @@ void StairsLedDriver::Update()
 					{
 						int currentLedStrip = stairsCount - i - 1;
 
-						if (ShouldFadeLed(ledStrips[i], delay))
+						if (ShouldFadeLed(ledStrips[i], delay, true))
 						{
 							ledStrips[i]->Fade(0, delay);
 							ledStrips[currentLedStrip]->Fade(0, delay);
-
 						}
 					}
 
