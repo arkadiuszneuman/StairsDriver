@@ -32,6 +32,7 @@ void setup() {
 }
 
 void loop() {
+	unsigned long starMillis = millis();
 	httpSite.Update();
 	otaDriver.Update();
 
@@ -51,6 +52,11 @@ void loop() {
 			stairsLedDriver.GoDown();
 		}
 	}
+
+	delay(10);
+	unsigned long loopTime = millis() - starMillis;
+	logger.Log("Loop time: ");
+	logger.LogLine(loopTime);
 }
 
 void onReceiveSettings(SettingsContainer receivedSettings) {
