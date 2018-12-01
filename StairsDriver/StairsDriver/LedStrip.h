@@ -12,7 +12,7 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 #include "Logger.h"
-//#include "FadeInfo.h"
+#include "FadeInfo.h"
 
 #define MAX_LED_BRIGHTNESS 4096
 
@@ -21,7 +21,7 @@ class LedStrip
 private:
 	Adafruit_PWMServoDriver pwm;
 	Logger logger;
-	//FadeInfo* fadePlan;
+	FadeInfo* fadePlan;
 	int milisCountForFullBrightness;
 	int channel;
 	int currentBrightness = 0;
@@ -50,6 +50,7 @@ public:
 	bool IsFadedToMinLevel();
 	bool IsFadedToMaxLevel();
 	void AddFadePlan(int brightnessPercent, int delay);
+	FadeInfo* GetFadePlan();
 };
 
 #endif

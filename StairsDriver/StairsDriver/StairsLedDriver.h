@@ -33,6 +33,7 @@ private:
 	int delayForNextStairToSwitchOn = 2000;
 	int millisCountForFullBrightness = 10000;
 	int state = STAIRS_OFF;
+	bool ShouldFadeLed(LedStrip* ledStrip, int delay, bool ignoreFullBrightness = false);
 public:
 	void Begin(Logger &logger, ConfigManager &configManager);
 	void Update();

@@ -49,10 +49,10 @@ void StairsLedDriver::GoUp()
 
 		for (int i = 0; i < stairsCount; ++i)
 		{
-		/*	if ((!ledStrips[i]->IsFading() && !ledStrips[i]->IsFadedToMaxLevel()) 
-				)*/
+			int delay = i * this->delayForNextStairToSwitchOn;
+			if (ShouldFadeLed(ledStrips[i], delay))
 			{
-				ledStrips[i]->Fade(100, i * this->delayForNextStairToSwitchOn);
+				ledStrips[i]->AddFadePlan(100, delay);
 				isAnyFaded = true;
 			}
 		}
@@ -79,10 +79,11 @@ void StairsLedDriver::GoDown()
 		for (int i = 0; i < stairsCount; ++i)
 		{
 			int currentLedStrip = stairsCount - i - 1;
-			/*if ((!ledStrips[currentLedStrip]->IsFading() && !ledStrips[currentLedStrip]->IsFadedToMaxLevel())
-				)*/
+
+			int delay = i * this->delayForNextStairToSwitchOn;
+			if (ShouldFadeLed(ledStrips[currentLedStrip], delay))
 			{
-				ledStrips[currentLedStrip]->Fade(100, i * this->delayForNextStairToSwitchOn);
+				ledStrips[currentLedStrip]->AddFadePlan(100, delay);
 				isAnyFaded = true;
 			}
 		}
@@ -99,6 +100,20 @@ void StairsLedDriver::GoDown()
 	this->timeOfLastSensorDetected = millis();
 }
 
+bool StairsLedDriver::ShouldFadeLed(LedStrip* ledStrip, int delay, bool ignoreFullBrightness)
+{
+	if (!ledStrip->IsBrightnessGoingUp() ||
+		(!ledStrip->IsFadePlanned() &&
+			(ledStrip->GetCurrentBrightness() < ledStrip->GetMaxLevelPwm() || ignoreFullBrightness)))
+	{
+		FadeInfo* fadePlan = ledStrip->GetFadePlan();
+		return fadePlan == NULL || fadePlan->GetStartOnMillis() > delay + millis();
+	}
+
+	return false;
+}
+
+
 void StairsLedDriver::Update()
 {
 	for (int i = 0; i < this->stairsCount; ++i)
@@ -108,7 +123,7 @@ void StairsLedDriver::Update()
 
 	if (state > STAIRS_OFF)
 	{
-		if (millis() - this->timeOfLastSensorDetected > this->timeForLedsSwitchedOn)
+		if (millis() - this->timeOfLastSensorDetected >= this->timeForLedsSwitchedOn)
 		{
 			bool allStairsAreOff = true;
 
@@ -137,29 +152,32 @@ void StairsLedDriver::Update()
 			else if (state == STAIRS_GO_UP_AND_DOWN)
 			{
 				int middleStair = stairsCount / 2;
+				bool isEven = stairsCount % 2 == 0;
+				bool isFirstRun = true;
 
 				for (int i = middleStair; i >= 0; --i)
 				{
+					int delay = (middleStair - i) * delayForNextStairToSwitchOn;
+					if (isEven && !isFirstRun)
+						delay -= delayForNextStairToSwitchOn;
+
 					if (ledStrips[i]->IsFadePlanned())
 						allStairsAreOff = false;
 					else
 					{
-						if (ledStrips[i]->GetCurrentBrightness() > ledStrips[i]->GetMinLevelPwm())
+						int currentLedStrip = stairsCount - i - 1;
+
+						if (ShouldFadeLed(ledStrips[i], delay, true))
 						{
-							ledStrips[i]
-								->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
+							ledStrips[i]->Fade(0, delay);
+							ledStrips[currentLedStrip]->Fade(0, delay);
 						}
 					}
 
-					if (ledStrips[stairsCount - i - 1]->IsFadePlanned())
-						allStairsAreOff = false;
-					else
+					if (isEven && isFirstRun)
 					{
-						if (ledStrips[stairsCount - i - 1]->GetCurrentBrightness() > ledStrips[stairsCount - i - 1]->GetCurrentBrightness())
-						{
-							ledStrips[stairsCount - i - 1]
-								->Fade(0, (middleStair - i) * this->delayForNextStairToSwitchOn);
-						}
+						isFirstRun = false;
+						--i;
 					}
 				}
 			}
