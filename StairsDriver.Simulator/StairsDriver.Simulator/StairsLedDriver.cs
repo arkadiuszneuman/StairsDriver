@@ -92,9 +92,11 @@
             this.timeOfLastSensorDetected = millis();
         }
 
-        public bool ShouldFadeLed(LedStrip ledStrip, int delay)
+        public bool ShouldFadeLed(LedStrip ledStrip, int delay, bool ignoreFullBrightness = false)
         {
-            if (!ledStrip.IsBrightnessGoingUp() || !ledStrip.IsFadePlanned())
+            if (!ledStrip.IsBrightnessGoingUp() || 
+                (!ledStrip.IsFadePlanned() && 
+                    (ledStrip.GetCurrentBrightness() < ledStrip.GetMaxLevelPwm() || ignoreFullBrightness)))
             {
                 FadeInfo fadePlan = ledStrip.GetFadePlan();
                 return fadePlan == null || fadePlan.GetStartOnMillis() > delay + millis();
@@ -156,7 +158,7 @@
                             {
                                 int currentLedStrip = stairsCount - i - 1;
 
-                                if (ShouldFadeLed(ledStrips[i], delay))
+                                if (ShouldFadeLed(ledStrips[i], delay, true))
                                 {
                                     ledStrips[i].Fade(0, delay);
                                     ledStrips[currentLedStrip]

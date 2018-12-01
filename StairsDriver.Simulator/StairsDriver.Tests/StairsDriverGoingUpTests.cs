@@ -116,6 +116,32 @@ namespace StairsDriver.Tests
             sut.ledStrips[3].GetCurrentBrightness().Should().Be(0);
         }
 
+        [Fact]
+        public void Can_Illuminate_And_Deilluminate_Many_Leds_When_Going_Up_And_Upper_Sensor_Triggers_After_All_Leds_Are_On()
+        {
+            sut.Begin(millisMock, 5000, 500, 1000, 3);
+            sut.GoUp();
+            Update(2000);
+            sut.ledStrips[0].GetCurrentBrightness().Should().Be(4096);
+            sut.ledStrips[1].GetCurrentBrightness().Should().Be(4096);
+            sut.ledStrips[2].GetCurrentBrightness().Should().Be(4096);
+            Update(3000);
+            sut.GoDown();
+            Update(8000);
+            Update(8500);
+            sut.ledStrips[0].GetCurrentBrightness().Should().Be(2048);
+            sut.ledStrips[1].GetCurrentBrightness().Should().Be(4096);
+            sut.ledStrips[2].GetCurrentBrightness().Should().Be(4096);
+            Update(9000);
+            sut.ledStrips[0].GetCurrentBrightness().Should().Be(0);
+            sut.ledStrips[1].GetCurrentBrightness().Should().Be(2048);
+            sut.ledStrips[2].GetCurrentBrightness().Should().Be(4096);
+            Update(9500);
+            sut.ledStrips[0].GetCurrentBrightness().Should().Be(0);
+            sut.ledStrips[1].GetCurrentBrightness().Should().Be(0);
+            sut.ledStrips[2].GetCurrentBrightness().Should().Be(2048);
+        }
+
         private void Update(int currentMillis)
         {
             millisMock.Millis = currentMillis;
